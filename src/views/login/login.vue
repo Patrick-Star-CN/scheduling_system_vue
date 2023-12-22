@@ -67,6 +67,7 @@ export default {
                 else if(role==="SUPER_ADMIN"){
                   router.push("/superManager/index")
                 }
+
                 notification["success"]({
                   message: '登录成功',
                   description:
