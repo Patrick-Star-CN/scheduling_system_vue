@@ -11,6 +11,7 @@
     "@ant-design/icons-vue": "^7.0.1",
     "ant-design-vue": "4.x",
     "axios": "^1.6.2",
+    "common-schedule": "^0.0.2",
     "core-js": "^3.8.3",
     "echarts": "^5.4.3",
     "js-cookie": "^3.0.5",
