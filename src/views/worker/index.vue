@@ -11,7 +11,7 @@
         </a-menu-item>
         <a-menu-item key="2" @click="change_page('edit')">
           <EditOutlined/>
-          <span>修改个人信息</span>
+          <span>修改密码</span>
         </a-menu-item>
         <a-menu-item key="3" @click="change_page('schedule')">
           <MonitorOutlined/>
