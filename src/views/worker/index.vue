@@ -72,7 +72,7 @@
         </edit>
         <leave-application v-if="user.page==='leaveApplication'">
         </leave-application>
-        <schedule v-if="user.page==='schedule'">
+        <schedule v-if="user.page==='schedule'" :user_detail="user_detail">
         </schedule>
       </a-layout-content>
     </a-layout>
@@ -103,6 +103,7 @@ export default {
     const role=store.state.role;
     const user=store.state.user;
     user.page=JSON.parse(sessionStorage.getItem("user")).page
+    user.username=JSON.parse(sessionStorage.getItem("user")).username
     user.key=key[user.page]
     console.log(user)
     return {
