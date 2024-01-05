@@ -17,6 +17,10 @@
           <PlusCircleOutlined />
           <span>增加用户信息</span>
         </a-menu-item>
+        <a-menu-item key="4" @click="change_page('addStoreRelu')">
+          <PlusSquareOutlined />
+          <span>增加门店信息</span>
+        </a-menu-item>
       </a-menu>
     </a-layout-sider>
     <a-layout>
@@ -62,6 +66,8 @@
         </edit>
         <add v-if="user.page==='add'">
         </add>
+        <add-store-relu v-if="user.page==='addStoreRelu'">
+        </add-store-relu>
       </a-layout-content>
     </a-layout>
   </a-layout>
@@ -74,19 +80,22 @@ import Edit from "@/views/manager/pages/edit.vue";
 import {useStore} from "vuex";
 import Add from "@/views/manager/pages/add.vue";
 import axios from "axios";
+import AddStoreRelu from "@/views/manager/pages/addStoreRelu.vue";
 
 export default {
-  components: {Add,Edit, Home},
+  components: {AddStoreRelu, Add,Edit, Home},
   setup() {
     const key={
       "home":'1',
       "edit":'2',
       'add':'3',
+      "addStoreRelu":'4'
     }
     const store = useStore()
     const role=store.state.role;
     const user=store.state.user;
     user.page=JSON.parse(sessionStorage.getItem("user")).page
+    user.username=JSON.parse(sessionStorage.getItem("user")).username
     user.key=key[user.page]
     console.log(user)
     return {
