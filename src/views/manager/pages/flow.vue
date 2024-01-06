@@ -5,7 +5,44 @@
   export default {
     data(){
       return{
-        fileList:[]
+        fileList:[],
+        columns: [
+          {
+            title: '编号',
+            dataIndex: 'id',
+            key: 'id',
+          },
+          {
+            title: '日期',
+            dataIndex: 'date',
+            key: 'date',
+          },
+          {
+            title: '开始时间',
+            dataIndex: 'start_time',
+            key: 'start_time',
+          },
+          {
+            title: '结束时间',
+            dataIndex: 'end_time',
+            key: 'end_time',
+          },
+          {
+            title: '客流',
+            dataIndex: 'flow',
+            key: 'flow',
+          },
+          {
+            title: '商店编号',
+            dataIndex: 'store_id',
+            key: 'store_id',
+          },
+          {
+            title: '操作',
+            key: 'action',
+          },
+        ],
+        flow:[]
       }
     },
     methods:{
@@ -47,6 +84,21 @@
               console.error('Error fetching data:', error);
             });
       },
+      get_flow(){
+        axios.get('/api/shift/customer-flow', {})
+            .then(response => {
+              this.data = response.data;
+              if(this.data.msg==="success"){
+                this.flow=this.data.data
+              }
+            })
+            .catch(error => {
+              console.error('Error fetching data:', error);
+            });
+      }
+    },
+    created() {
+      this.get_flow()
     }
   }
 </script>
@@ -58,14 +110,14 @@
     </h2>
 
   </a-flex>
-  <div style="height: 50vh">
+  <div style="height: 20vh">
     <a-upload-dragger
         v-model:fileList="fileList"
         name="file"
         :multiple="false"
         :customRequest="uploadFiles"
     >
-      <p class="ant-upload-drag-icon" style="margin-top: 10vh">
+      <p class="ant-upload-drag-icon" style="margin-top:0">
         <inbox-outlined></inbox-outlined>
       </p>
       <p class="ant-upload-text">点击或者拖曳上传多个文件</p>
@@ -74,6 +126,25 @@
       </p>
     </a-upload-dragger>
   </div>
+  <br>
+  <a-divider></a-divider>
+  <a-table :columns="columns" :data-source="flow" :pagination="{ pageSize: 3 }">
+    <template #bodyCell="{ column, record }">
+      <template v-if="column.key === 'action'">
+        <span>
+          <a-button type="primary" @click="edit(column,record)">
+            <FormOutlined/>
+            <span>修改信息</span>
+          </a-button>
+          <a-divider type="vertical"/>
+          <a-button style="background-color:#F56C6C;color: white" @click="Delete(column,record)">
+            <MinusOutlined/>
+            删除信息
+          </a-button>
+        </span>
+      </template>
+    </template>
+  </a-table>
 
 </template>
 
