@@ -21,6 +21,10 @@
           <PlusSquareOutlined />
           <span>增加门店信息</span>
         </a-menu-item>
+        <a-menu-item key="5" @click="change_page('profession')">
+          <PlusSquareOutlined />
+          <span>管理工种信息</span>
+        </a-menu-item>
       </a-menu>
     </a-layout-sider>
     <a-layout>
@@ -68,6 +72,8 @@
         </add>
         <add-store-relu v-if="user.page==='addStoreRelu'">
         </add-store-relu>
+        <profession v-if="user.page==='profession'">
+        </profession>
       </a-layout-content>
     </a-layout>
   </a-layout>
@@ -81,15 +87,17 @@ import {useStore} from "vuex";
 import Add from "@/views/manager/pages/add.vue";
 import axios from "axios";
 import AddStoreRelu from "@/views/manager/pages/addStoreRelu.vue";
+import Profession from "@/views/manager/pages/profession.vue";
 
 export default {
-  components: {AddStoreRelu, Add,Edit, Home},
+  components: {Profession, AddStoreRelu, Add,Edit, Home},
   setup() {
     const key={
       "home":'1',
       "edit":'2',
       'add':'3',
-      "addStoreRelu":'4'
+      "addStoreRelu":'4',
+      "profession":'5'
     }
     const store = useStore()
     const role=store.state.role;
