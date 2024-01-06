@@ -25,6 +25,10 @@
           <PlusSquareOutlined />
           <span>查看排班</span>
         </a-menu-item>
+        <a-menu-item key="6" @click="change_page('flow')">
+          <PlusSquareOutlined />
+          <span>导入客流信息</span>
+        </a-menu-item>
       </a-menu>
     </a-layout-sider>
     <a-layout>
@@ -75,6 +79,8 @@
         </add-store-relu>
         <schedule v-if="user.page==='schedule'" :user_detail="user_detail">
         </schedule>
+        <flow v-if="user.page==='flow'">
+        </flow>
       </a-layout-content>
     </a-layout>
   </a-layout>
@@ -89,16 +95,18 @@ import Add from "@/views/manager/pages/add.vue";
 import axios from "axios";
 import AddStoreRelu from "@/views/manager/pages/addStoreRelu.vue";
 import Schedule from "@/views/manager/pages/schedule.vue";
+import Flow from "@/views/manager/pages/flow.vue";
 
 export default {
-  components: {Schedule, AddStoreRelu, Add,Edit, Home},
+  components: {Flow, Schedule, AddStoreRelu, Add,Edit, Home},
   setup() {
     const key={
       "home":'1',
       "edit":'2',
       'add':'3',
       "addStoreRelu":'4',
-      "schedule":'5'
+      "schedule":'5',
+      "flow":'6'
     }
     const store = useStore()
     const role=store.state.role;
