@@ -85,7 +85,7 @@
         </add>
         <add-store-relu v-if="user.page==='addStoreRelu'">
         </add-store-relu>
-        <schedule v-if="user.page==='schedule'" :user_detail="user_detail">
+        <schedule v-if="user.page==='schedule'" :user_detail="user_detail" :refresh="refresh">
         </schedule>
         <flow v-if="user.page==='flow'">
         </flow>
@@ -128,19 +128,20 @@ export default {
     const store = useStore()
     const role=store.state.role;
     const user=store.state.user;
+    let user_detail=store.state.user_detail;
     user.page=JSON.parse(sessionStorage.getItem("user")).page
     user.username=JSON.parse(sessionStorage.getItem("user")).username
+    user_detail=JSON.parse(sessionStorage.getItem("user_detail"))
     user.key=key[user.page]
-    console.log(user)
     return {
-      user,role
+      user,role,user_detail
     }
   },
   data() {
     return {
       selectedKeys: [this.user.key],
       collapsed: false,
-      user_detail:{}
+      refresh:false,
     }
   },
   methods: {
@@ -162,6 +163,7 @@ export default {
             this.data = response.data;
             if (this.data.msg === "success") {
               this.user_detail=this.data.data;
+              sessionStorage.setItem("user_detail",JSON.stringify(this.user_detail))
             } else {
               message.warn("查询用户具体信息失败")
             }
@@ -171,6 +173,7 @@ export default {
           });
     },
     generate_shift(){
+      this.refresh=true;
       axios.post('/api/shift/'+this.user_detail.store_id, {})
           .then(response => {
             this.data = response.data;
@@ -180,7 +183,7 @@ export default {
                 description:
                     '自动生成排班成功',
               });
-
+              this.reload()
             } else {
               notification["error"]({
                 message: '生成排班情况',
