@@ -37,6 +37,10 @@
           <SearchOutlined />
           <span>审核请假</span>
         </a-menu-item>
+        <a-menu-item key="9" @click="change_page('group')">
+          <PlusSquareOutlined />
+          <span>管理组别信息</span>
+        </a-menu-item>
       </a-menu>
     </a-layout-sider>
     <a-layout>
@@ -93,6 +97,8 @@
         </profession>
         <review v-if="user.page==='review'">
         </review>
+         <group v-if="user.page==='group'">
+        </group>
       </a-layout-content>
     </a-layout>
   </a-layout>
@@ -110,10 +116,10 @@ import Schedule from "@/views/manager/pages/schedule.vue";
 import Flow from "@/views/manager/pages/flow.vue";
 import Profession from "@/views/manager/pages/profession.vue";
 import Review from "@/views/group_manager/pages/review.vue";
-
+import Group from "@/views/manager/pages/group.vue";
 export default {
   inject:["reload"],
-  components: {Review, Profession, Flow, Schedule, AddStoreRelu, Add,Edit, Home},
+  components: {Review, Profession, Group, Flow, Schedule, AddStoreRelu, Add,Edit, Home},
   setup() {
     const key={
       "home":'1',
@@ -123,7 +129,8 @@ export default {
       "schedule":'5',
       "flow":'6',
       "profession":'7',
-      "review":'8'
+      "review":'8'，
+      "group":"9"
     }
     const store = useStore()
     const role=store.state.role;

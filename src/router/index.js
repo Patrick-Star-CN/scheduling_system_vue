@@ -19,6 +19,28 @@ const routes = [
     ],
   },
   {
+    path: '/groupManager',
+    name: 'groupManager',
+    redirect:"index",
+    children: [
+      {
+        path: 'index',
+        component:() => import('../views/group_manager/index.vue'),
+      },
+    ],
+  },
+  {
+    path: '/viceManager',
+    name: 'viceManager',
+    redirect:"index",
+    children: [
+      {
+        path: 'index',
+        component:() => import('../views/vice_manager/index.vue'),
+      },
+    ],
+  },
+  {
     path: '/worker',
     name: 'worker',
     redirect:"index",
