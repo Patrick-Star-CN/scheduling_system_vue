@@ -66,6 +66,7 @@ export default {
               this.reload()
             } else {
               message.error('删除失败！');
+              this.reload()
             }
           })
           .catch(error => {
@@ -93,6 +94,7 @@ export default {
               this.reload()
             } else {
               message.error('修改失败！');
+              this.reload()
             }
           })
           .catch(error => {
@@ -118,6 +120,7 @@ export default {
                 this.reload()
               } else {
                 message.error('添加失败！');
+                this.reload()
               }
             })
             .catch(error => {

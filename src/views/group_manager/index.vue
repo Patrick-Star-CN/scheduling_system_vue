@@ -13,10 +13,6 @@
           <EditOutlined/>
           <span>修改个人信息</span>
         </a-menu-item>
-        <a-menu-item key="3" @click="change_page('group')">
-          <PlusSquareOutlined />
-          <span>管理组别信息</span>
-        </a-menu-item>
       </a-menu>
     </a-layout-sider>
     <a-layout>
@@ -60,8 +56,6 @@
         </home>
         <edit v-if="user.page==='edit'">
         </edit>
-        <group v-if="user.page==='group'">
-        </group>
       </a-layout-content>
     </a-layout>
   </a-layout>
@@ -73,15 +67,13 @@ import Home from "@/views/vice_manager/pages/home.vue";
 import Edit from "@/views/vice_manager/pages/edit.vue";
 import {useStore} from "vuex";
 import axios from "axios";
-import Group from "@/views/vice_manager/pages/group.vue";
 
 export default {
-  components: { Group, Edit, Home},
+  components: { Edit, Home},
   setup() {
     const key={
       "home":'1',
-      "edit":'2',
-      "group":'3'
+      "edit":'2'
     }
     const store = useStore()
     const role=store.state.role;
