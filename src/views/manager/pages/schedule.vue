@@ -1,7 +1,6 @@
 <script>
 
 import axios from "axios";
-import {message} from "ant-design-vue";
 
 export default {
   props: {
@@ -60,7 +59,7 @@ export default {
               this.staff_shift[0].start_time = start_time
               this.staff_shift[this.staff_shift.length - 1].end_time = end_time
             } else {
-              message.error('获取信息失败！');
+              console.log("11")
             }
           })
           .catch(error => {
@@ -101,7 +100,7 @@ export default {
               }
               console.log(this.Detail)
             } else {
-              message.error('获取信息失败！');
+              console.log("11")
             }
           })
           .catch(error => {

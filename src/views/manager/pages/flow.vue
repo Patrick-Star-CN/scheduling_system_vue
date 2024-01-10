@@ -1,106 +1,112 @@
 <script>
-  import {message} from "ant-design-vue";
-  import axios from "axios";
+import {message} from "ant-design-vue";
+import axios from "axios";
 
-  export default {
-    data(){
-      return{
-        fileList:[],
-        columns: [
-          {
-            title: '编号',
-            dataIndex: 'id',
-            key: 'id',
-          },
-          {
-            title: '日期',
-            dataIndex: 'date',
-            key: 'date',
-          },
-          {
-            title: '开始时间',
-            dataIndex: 'start_time',
-            key: 'start_time',
-          },
-          {
-            title: '结束时间',
-            dataIndex: 'end_time',
-            key: 'end_time',
-          },
-          {
-            title: '客流',
-            dataIndex: 'flow',
-            key: 'flow',
-          },
-          {
-            title: '商店编号',
-            dataIndex: 'store_id',
-            key: 'store_id',
-          },
-          {
-            title: '操作',
-            key: 'action',
-          },
-        ],
-        flow:[]
-      }
-    },
-    methods:{
-      async uploadFiles(info) {
-        //初始化文件信息
-        this.fileInfo = {
-          uid: info.file.uid,
-          name: info.file.name,
-          status: "uploading",
-          response: "",
-          url: "",
-        };
-        //调用公共上传方法
-        await this.uploadFilesToServer(
-            info.file
-        );
-      },
-
-      uploadFilesToServer(files) {
-        axios.post('/api/shift/customer-flow', {
-          file:files,
-        })
-            .then(response => {
-              this.data = response.data;
-              if (this.data.msg === "success") {
-                this.fileInfo.status = "done";
-                this.fileList.pop()
-                this.fileList.push(this.fileInfo)
-                message.success(files.name+"上传成功！");
-              } else {
-                this.fileInfo.status = "error";
-                this.fileList.pop()
-                this.fileList.push(this.fileInfo)
-                console.log(this.fileList)
-                message.error(files.name+"上传失败！");
-              }
-            })
-            .catch(error => {
-              console.error('Error fetching data:', error);
-            });
-      },
-      get_flow(){
-        axios.get('/api/shift/customer-flow', {})
-            .then(response => {
-              this.data = response.data;
-              if(this.data.msg==="success"){
-                this.flow=this.data.data
-              }
-            })
-            .catch(error => {
-              console.error('Error fetching data:', error);
-            });
-      }
-    },
-    created() {
-      this.get_flow()
+export default {
+  inject:["reload"],
+  data() {
+    return {
+      fileList: [],
+      columns: [
+        {
+          title: '编号',
+          dataIndex: 'id',
+          key: 'id',
+        },
+        {
+          title: '日期',
+          dataIndex: 'date',
+          key: 'date',
+        },
+        {
+          title: '开始时间',
+          dataIndex: 'start_time',
+          key: 'start_time',
+        },
+        {
+          title: '结束时间',
+          dataIndex: 'end_time',
+          key: 'end_time',
+        },
+        {
+          title: '客流',
+          dataIndex: 'flow',
+          key: 'flow',
+        },
+        {
+          title: '商店编号',
+          dataIndex: 'store_id',
+          key: 'store_id',
+        },
+        {
+          title: '操作',
+          key: 'action',
+        },
+      ],
+      flow: []
     }
+  },
+  methods: {
+    async uploadFiles(info) {
+      //初始化文件信息
+      this.fileInfo = {
+        uid: info.file.uid,
+        name: info.file.name,
+        status: "uploading",
+        response: "",
+        url: "",
+      };
+      //调用公共上传方法
+      await this.uploadFilesToServer(
+          info.file
+      );
+    },
+
+    uploadFilesToServer(files) {
+      axios.post('/api/shift/customer-flow', {
+        file: files,
+      }, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        }
+      })
+          .then(response => {
+            this.data = response.data;
+            if (this.data.msg === "success") {
+              this.fileInfo.status = "done";
+              this.fileList.pop()
+              this.fileList.push(this.fileInfo)
+              message.success(files.name + "上传成功！");
+              this.reload()
+            } else {
+              this.fileInfo.status = "error";
+              this.fileList.pop()
+              this.fileList.push(this.fileInfo)
+              console.log(this.fileList)
+              message.error(files.name + "上传失败！");
+            }
+          })
+          .catch(error => {
+            console.error('Error fetching data:', error);
+          });
+    },
+    get_flow() {
+      axios.get('/api/shift/customer-flow', {})
+          .then(response => {
+            this.data = response.data;
+            if (this.data.msg === "success") {
+              this.flow = this.data.data
+            }
+          })
+          .catch(error => {
+            console.error('Error fetching data:', error);
+          });
+    }
+  },
+  created() {
+    this.get_flow()
   }
+}
 </script>
 
 <template>
