@@ -3,8 +3,10 @@
 import axios from "axios";
 
 export default {
+  inject:["reload"],
   props: {
     user_detail: Object,
+    refresh:Boolean
   },
   data() {
     return {
@@ -38,14 +40,16 @@ export default {
         },
       ],
       shift_detail:Array.from({ length: 6 }, () => new Array(7).fill(false)),
-      Detail:Array.from({ length: 6 }, () => new Array(7)),
-      schedule: ""
+      Detail:Array.from({ length: 6 }, () => new Array(7).fill("")),
+      schedule: "",
+      cashierList:[],
+      customerServiceList:[],
+      storageList:[]
     }
   },
   methods: {
     detail(i,j) {
       this.open = true;
-      console.log(this.Detail[i][j])
       this.schedule=this.Detail[i][j]
     },
     get_shift() {
@@ -58,8 +62,6 @@ export default {
               const end_time = this.data.end_time
               this.staff_shift[0].start_time = start_time
               this.staff_shift[this.staff_shift.length - 1].end_time = end_time
-            } else {
-              console.log("11")
             }
           })
           .catch(error => {
@@ -67,31 +69,36 @@ export default {
           });
     },
     get_shift_detail(){
+      console.log(this.user_detail.store_id)
       axios.get('/api/shift/schedule/' + this.user_detail.store_id, {})
           .then(response => {
             this.data = response.data;
+            console.log(this.data)
             if (this.data.msg === "success") {
               const detail=this.data.data
               console.log(detail)
+              if(detail.length===0){
+                return;
+              }
               for(let i=0; i< detail.length;++i){
                 const details=detail[i].scheduleDetails;
                 for(let j=0;j<details.length;++j){
                   const EveDeatil=details[j];
                   this.Detail[j][i]=EveDeatil
-                  const cashierList=EveDeatil.cashierList;
-                  const customerServiceList=EveDeatil.customerServiceList;
-                  const storageList=EveDeatil.storageList;
-                  for(let inf of cashierList){
+                  this.cashierList=EveDeatil.cashierList;
+                  this.customerServiceList=EveDeatil.customerServiceList;
+                  this.storageList=EveDeatil.storageList;
+                  for(let inf of this.cashierList){
                     if(inf.name===this.user_detail.name){
                       this.shift_detail[j][i]=true
                     }
                   }
-                  for(let inf of customerServiceList){
+                  for(let inf of this.customerServiceList){
                     if(inf.name===this.user_detail.name){
                       this.shift_detail[j][i]=true
                     }
                   }
-                  for(let inf of storageList){
+                  for(let inf of this.storageList){
                     if(inf.name===this.user_detail.name){
                       this.shift_detail[j][i]=true
                     }
@@ -99,8 +106,6 @@ export default {
                 }
               }
               console.log(this.Detail)
-            } else {
-              console.log("11")
             }
           })
           .catch(error => {
@@ -109,6 +114,7 @@ export default {
     },
   },
   created() {
+    console.log(this.user_detail)
     this.get_shift()
     this.get_shift_detail()
   }
@@ -144,7 +150,7 @@ export default {
       title="排班信息"
       placement="right"
   >
-    <div v-if="schedule.cashierList.length!==0">
+    <div v-if="schedule.schedule==null || schedule.cashierList.length!==0">
       <p style="font-weight: bold">收银</p>
       <ul>
         <li v-for="user in schedule.cashierList" :key="user">
@@ -153,7 +159,7 @@ export default {
       </ul>
     </div>
 
-    <div v-if="schedule.customerServiceList.length!==0">
+    <div v-if="schedule.customerServiceList==null || schedule.customerServiceList.length!==0">
       <p style="font-weight: bold">导购</p>
       <ul>
         <li v-for="user in schedule.customerServiceList" :key="user">
@@ -162,7 +168,7 @@ export default {
       </ul>
     </div>
 
-    <div v-if="schedule.storageList.length!==0">
+    <div v-if="schedule.storageList==null || schedule.storageList.length!==0">
       <p style="font-weight: bold">库房</p>
       <ul>
         <li v-for="user in schedule.storageList" :key="user">
