@@ -16,19 +16,24 @@ export default {
     return {
       columns: [
         {
-          title: '工种编号',
+          title: '组别编号',
           dataIndex: 'id',
           key: 'id',
         },
         {
           title: '商店编号',
-          dataIndex: 'storeId',
-          key: 'storeId',
+          dataIndex: 'store_id',
+          key: 'store_id',
         },
         {
           title: '管理员编号',
-          dataIndex: 'managerId',
-          key: 'managerId',
+          dataIndex: 'manager_id',
+          key: 'manager_id',
+        },
+        {
+          title: '组别名称',
+          dataIndex: 'name',
+          key: 'name',
         },
         {
           title: '工种名称',
@@ -40,14 +45,16 @@ export default {
           key: 'action',
         },
       ],
-      increase_profession: {
-        managerId: "",
+      increase_group: {
+        manager_id: "",
+        name:"",
         type: ""
       },
-      edit_profession: {
+      edit_group: {
         id: "",
-        storeId: "",
-        managerId: "",
+        store_id: "",
+        manager_id: "",
+        name:"",
         type: ""
       },
       increase_open: false,
@@ -58,7 +65,7 @@ export default {
   methods: {
     Delete(column, record) {
       console.log(column, record)
-      axios.delete('/api/profession/' + record.id, {})
+      axios.delete('/api/group/' + record.id, {})
           .then(response => {
             this.data = response.data;
             if (this.data.msg === "success") {
@@ -75,7 +82,7 @@ export default {
 
     },
     edit(column, record) {
-      this.edit_profession=record
+      this.edit_group=record
       this.edit_open = true
     },
     editCancel(){
@@ -83,11 +90,12 @@ export default {
     },
     editOk() {
       this.edit_open = false;
-      axios.put('/api/profession', {
-        id: this.edit_profession.id,
-        storeId: this.edit_profession.storeId,
-        managerId: this.edit_profession.managerId,
-        type:this.edit_profession.type
+      axios.put('/api/group', {
+        id: this.edit_group.id,
+        store_id: this.edit_group.store_id,
+        manager_id: this.edit_group.manager_id,
+        name:this.edit_group.name,
+        type:this.edit_group.type
       })
           .then(response => {
             console.log(response.data)
@@ -106,15 +114,16 @@ export default {
       this.edit_open = !this.edit_open
     },
     increaseOk() {
-      console.log(this.increase_profession)
-      if (this.increase_profession.managerId === "" || this.increase_profession.type === "") {
+      console.log(this.increase_group)
+      if (this.increase_group.manager_id === "" || this.increase_group.name === "" || this.increase_group.type === "") {
         message.error("无法添加，未完整输入信息")
       } else {
         this.increase_open = false;
-        console.log(this.increase_profession)
-        axios.post('/api/profession/' + this.increase_profession.managerId + '/' + this.increase_profession.type, {
-          managerId: this.increase_profession.managerId,
-          type:this.increase_profession.type
+        console.log(this.increase_group)
+        axios.post('/api/group/' + this.increase_group.manager_id + '/' + this.increase_group.name + '/' + this.increase_group.type, {
+          manager_id: this.increase_group.manager_id,
+          name:this.increase_group.name,
+          type:this.increase_group.type
         })
             .then(response => {
               this.data = response.data;
@@ -131,8 +140,8 @@ export default {
             });
       }
     },
-    get_profession(){
-      axios.get('/api/profession', {})
+    get_group(){
+      axios.get('/api/group', {})
           .then(response => {
             this.detail = response.data.data;
             console.log(this.detail)
@@ -143,7 +152,7 @@ export default {
     }
   },
   created() {
-    this.get_profession();
+    this.get_group();
   }
 }
 </script>
@@ -176,41 +185,48 @@ export default {
   <a-modal title="修改信息" v-model:open="edit_open" @ok="editOk" okText="保存"
            @cancel="editCancel" cancelText="退出">
     <a-form
-        :model="edit_profession"
+        :model="edit_group"
         :label-col="{ span: 6 }"
         :wrapper-col="{ span: 16 }"
         autocomplete="off"
     >
       <a-form-item
-          label="工种编号"
+          label="组别编号"
           name="id"
           :rules="[{ required: true, message: '请输入工种的编号id!' }]"
       >
-        <a-input-number id="inputNumber" style="width: 100%" v-model:value="edit_profession.id" :min="1"
+        <a-input-number id="inputNumber" style="width: 100%" v-model:value="edit_group.id" :min="1"
                         :max="100000" disabled="disabled"/>
       </a-form-item>
       <a-form-item
           label="商店编号"
-          name="storeId"
+          name="store_id"
           :rules="[{ required: true, message: '请输入商店的编号!' }]"
       >
-        <a-input-number id="inputNumber" style="width: 100%" v-model:value="edit_profession.storeId" :min="1"
+        <a-input-number id="inputNumber" style="width: 100%" v-model:value="edit_group.store_id" :min="1"
                         :max="100000" disabled="disabled"/>
       </a-form-item>
       <a-form-item
           label="管理员编号"
-          name="managerId"
+          name="manager_id"
           :rules="[{ required: true, message: '请输入管理员的编号!' }]"
       >
-        <a-input-number id="inputNumber" style="width: 100%" v-model:value="edit_profession.managerId" :min="1"
+        <a-input-number id="inputNumber" style="width: 100%" v-model:value="edit_group.manager_id" :min="1"
                         :max="100000"/>
+      </a-form-item>
+      <a-form-item
+          label="组别名称"
+          name="name"
+          :rules="[{ required: true, message: '请输入组别的名称!' }]"
+      >
+        <a-input v-model:value="edit_group.name"/>
       </a-form-item>
       <a-form-item
           label="工种名称"
           name="type"
           :rules="[{ required: true, message: '请输入工种的名称!' }]"
       >
-        <a-radio-group v-model:value="edit_profession.type" button-style="solid">
+        <a-radio-group v-model:value="edit_group.type" button-style="solid">
           <a-radio-button value="CASHIER">收银</a-radio-button>
           <a-radio-button value="CUSTOMER_SERVICE">导购</a-radio-button>
           <a-radio-button value="STORAGE">库房</a-radio-button>
@@ -222,25 +238,32 @@ export default {
   <a-modal title="增添信息" v-model:open="increase_open" @ok="increaseOk" okText="确认"
            cancelText="退出">
     <a-form
-        :model="increase_profession"
+        :model="increase_group"
         :label-col="{ span: 6 }"
         :wrapper-col="{ span: 16 }"
         autocomplete="off"
     >
       <a-form-item
           label="管理员编号"
-          name="managerId"
+          name="manager_id"
           :rules="[{ required: true, message: '请输入管理员的编号!' }]"
       >
-        <a-input-number id="inputNumber" style="width: 100%" v-model:value="increase_profession.managerId" :min="1"
+        <a-input-number id="inputNumber" style="width: 100%" v-model:value="increase_group.manager_id" :min="1"
                         :max="100000"/>
+      </a-form-item>
+      <a-form-item
+          label="组别名称"
+          name="name"
+          :rules="[{ required: true, message: '请输入组别的名称!' }]"
+      >
+        <a-input v-model:value="increase_group.name"/>
       </a-form-item>
       <a-form-item
           label="工种名称"
           name="type"
           :rules="[{ required: true, message: '请输入工种的名称!' }]"
       >
-        <a-radio-group v-model:value="increase_profession.type" button-style="solid">
+        <a-radio-group v-model:value="increase_group.type" button-style="solid">
           <a-radio-button value="CASHIER">收银</a-radio-button>
           <a-radio-button value="CUSTOMER_SERVICE">导购</a-radio-button>
           <a-radio-button value="STORAGE">库房</a-radio-button>

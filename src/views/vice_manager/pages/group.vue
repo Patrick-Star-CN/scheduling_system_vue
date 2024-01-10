@@ -47,8 +47,7 @@ export default {
       ],
       increase_group: {
         manager_id: "",
-        name:"",
-        type: ""
+        name:""
       },
       edit_group: {
         id: "",
@@ -84,6 +83,9 @@ export default {
     edit(column, record) {
       this.edit_group=record
       this.edit_open = true
+    },
+    editCancel(){
+      this.reload()
     },
     editOk() {
       this.edit_open = false;
@@ -179,7 +181,7 @@ export default {
   </a-table>
 
   <a-modal title="修改信息" v-model:open="edit_open" @ok="editOk" okText="保存"
-           cancelText="退出">
+           @cancel="editCancel" cancelText="退出">
     <a-form
         :model="edit_group"
         :label-col="{ span: 6 }"
