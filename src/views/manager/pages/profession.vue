@@ -124,6 +124,7 @@ export default {
               } else {
                 message.error('添加失败！');
                 this.reload()
+
               }
             })
             .catch(error => {

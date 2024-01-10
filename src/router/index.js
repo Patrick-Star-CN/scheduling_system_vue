@@ -63,6 +63,17 @@ const routes = [
     ],
   },
   {
+    path: '/groupManager',
+    name: 'groupManager',
+    redirect:"index",
+    children: [
+      {
+        path: 'index',
+        component:() => import('../views/group_manager/index.vue'),
+      },
+    ],
+  },
+  {
     path: "/:pathMatch(.*)*",
     component: () => import('../views/error/404.vue'),
     hidden: true

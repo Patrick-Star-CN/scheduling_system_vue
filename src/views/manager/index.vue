@@ -21,11 +21,23 @@
           <PlusSquareOutlined />
           <span>增加门店信息</span>
         </a-menu-item>
-        <a-menu-item key="5" @click="change_page('profession')">
-          <PlusSquareOutlined />
+        <a-menu-item key="5" @click="change_page('schedule')">
+          <MonitorOutlined/>
+          <span>查看排班</span>
+        </a-menu-item>
+        <a-menu-item key="6" @click="change_page('flow')">
+          <FormOutlined />
+          <span>导入客流信息</span>
+        </a-menu-item>
+        <a-menu-item key="7" @click="change_page('profession')">
+          <UserSwitchOutlined />
           <span>管理工种信息</span>
         </a-menu-item>
-        <a-menu-item key="6" @click="change_page('group')">
+        <a-menu-item key="8" @click="change_page('review')">
+          <SearchOutlined />
+          <span>审核请假</span>
+        </a-menu-item>
+        <a-menu-item key="9" @click="change_page('group')">
           <PlusSquareOutlined />
           <span>管理组别信息</span>
         </a-menu-item>
@@ -46,7 +58,8 @@
           </a-breadcrumb>
           <SearchOutlined class="top"/>
           <ExpandAltOutlined class="top-right"/>
-          <FontSizeOutlined class="top-right" style="padding-right: 10px"/>
+          <FontSizeOutlined class="top-right" />
+          <FieldTimeOutlined class="top-right" id="generate" @click="generate_shift" v-if="user.page==='schedule'"/>
           <a-avatar shape="square" size="large">
             <template #icon>
               <UserOutlined/>
@@ -76,9 +89,15 @@
         </add>
         <add-store-relu v-if="user.page==='addStoreRelu'">
         </add-store-relu>
+        <schedule v-if="user.page==='schedule'" :user_detail="user_detail">
+        </schedule>
+        <flow v-if="user.page==='flow'">
+        </flow>
         <profession v-if="user.page==='profession'">
         </profession>
-        <group v-if="user.page==='group'">
+        <review v-if="user.page==='review'">
+        </review>
+         <group v-if="user.page==='group'">
         </group>
       </a-layout-content>
     </a-layout>
@@ -93,19 +112,25 @@ import {useStore} from "vuex";
 import Add from "@/views/manager/pages/add.vue";
 import axios from "axios";
 import AddStoreRelu from "@/views/manager/pages/addStoreRelu.vue";
+import Schedule from "@/views/manager/pages/schedule.vue";
+import Flow from "@/views/manager/pages/flow.vue";
 import Profession from "@/views/manager/pages/profession.vue";
+import Review from "@/views/group_manager/pages/review.vue";
 import Group from "@/views/manager/pages/group.vue";
-
 export default {
-  components: {Profession, Group, AddStoreRelu, Add,Edit, Home},
+  inject:["reload"],
+  components: {Review, Profession, Group, Flow, Schedule, AddStoreRelu, Add,Edit, Home},
   setup() {
     const key={
       "home":'1',
       "edit":'2',
       'add':'3',
       "addStoreRelu":'4',
-      "profession":'5',
-      "group":"6"
+      "schedule":'5',
+      "flow":'6',
+      "profession":'7',
+      "review":'8'，
+      "group":"9"
     }
     const store = useStore()
     const role=store.state.role;
@@ -151,10 +176,33 @@ export default {
           .catch(error => {
             console.error('Error fetching data:', error);
           });
+    },
+    generate_shift(){
+      axios.post('/api/shift/'+this.user_detail.store_id, {})
+          .then(response => {
+            this.data = response.data;
+            if (this.data.msg === "success") {
+              notification["success"]({
+                message: '生成排班情况',
+                description:
+                    '自动生成排班成功',
+              });
+
+            } else {
+              notification["error"]({
+                message: '生成排班情况',
+                description:
+                    '自动生成排班失败',
+              });
+            }
+          })
+          .catch(error => {
+            console.error('Error fetching data:', error);
+          });
     }
   },
   created() {
-    this.get_user_detail()
+      this.get_user_detail()
   }
 }
 </script>
@@ -208,5 +256,20 @@ export default {
   padding-left: 10px;
   font-size: 30px;
   line-height: 64px;
+}
+#generate{
+  padding-right: 10px;
+  animation-name: example;
+  animation-duration: 4s;
+  animation-iteration-count: infinite;
+}
+#generate:hover{
+  cursor: pointer;
+}
+@keyframes example {
+  0%   {color: red;}
+  25%  {color: orange;}
+  50%  {color: deeppink;}
+  100% {color: pink;}
 }
 </style>

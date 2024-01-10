@@ -13,6 +13,14 @@
           <EditOutlined/>
           <span>修改个人信息</span>
         </a-menu-item>
+        <a-menu-item key="3" @click="change_page('add')">
+          <PlusCircleOutlined />
+          <span>增加用户信息</span>
+        </a-menu-item>
+        <a-menu-item key="3" @click="change_page('review')">
+          <PlusCircleOutlined />
+          <span>审核请假记录</span>
+        </a-menu-item>
       </a-menu>
     </a-layout-sider>
     <a-layout>
@@ -56,6 +64,10 @@
         </home>
         <edit v-if="user.page==='edit'">
         </edit>
+        <add v-if="user.page==='add'">
+        </add>
+        <review v-if="user.page==='review'">
+        </review>
       </a-layout-content>
     </a-layout>
   </a-layout>
@@ -63,17 +75,21 @@
 <script>
 import router from "@/router";
 import {message, notification} from "ant-design-vue";
-import Home from "@/views/vice_manager/pages/home.vue";
-import Edit from "@/views/vice_manager/pages/edit.vue";
+import Home from "@/views/group_manager/pages/home.vue";
+import Edit from "@/views/group_manager/pages/edit.vue";
 import {useStore} from "vuex";
+import Add from "@/views/group_manager/pages/add.vue";
+import Review from "@/views/group_manager/pages/review.vue";
 import axios from "axios";
 
 export default {
-  components: { Edit, Home},
+  components: {Add,Edit, Home,Review},
   setup() {
     const key={
       "home":'1',
-      "edit":'2'
+      "edit":'2',
+      'add':'3',
+      'review':'4',
     }
     const store = useStore()
     const role=store.state.role;
