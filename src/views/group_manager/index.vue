@@ -95,6 +95,7 @@ export default {
     const role=store.state.role;
     const user=store.state.user;
     user.page=JSON.parse(sessionStorage.getItem("user")).page
+    user.username=JSON.parse(sessionStorage.getItem("user")).username
     user.key=key[user.page]
     console.log(user)
     return {

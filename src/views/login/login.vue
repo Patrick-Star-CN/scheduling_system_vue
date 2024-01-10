@@ -71,7 +71,10 @@ export default {
                 else if(role==="MANAGER"){
                   router.push("/manager/index")
                 }
-                else if(role==="GroupManager"){
+                else if(role==="VICE_MANAGER"){
+                  router.push("/viceManager/index")
+                }
+                else if(role==="GROUP_MANAGER"){
                   router.push("/groupManager/index")
                 }
                 notification["success"]({
