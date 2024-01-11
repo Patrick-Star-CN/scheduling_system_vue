@@ -44,7 +44,7 @@ export default createStore({
       "MANAGER":"经理",
       "SUPER_ADMIN":"系统管理员",
       "STORAGE":"库房",
-      "Cashier":"收银",
+      "CASHIER":"收银",
       "CUSTOMER_SERVICE":"导购",
       "VICE_MANAGER":"副经理",
       "GROUP_MANAGER":"小组长"
