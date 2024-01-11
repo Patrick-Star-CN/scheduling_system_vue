@@ -141,8 +141,11 @@ export default {
     get_group(){
       axios.get('/api/group', {})
           .then(response => {
-            this.detail = response.data.data;
-            console.log(this.detail)
+            this.data = response.data;
+            if (this.data.msg === "success") {
+              this.detail = this.data.data;
+              console.log(this.detail);
+            }
           })
           .catch(error => {
             console.error('Error fetching data:', error);
