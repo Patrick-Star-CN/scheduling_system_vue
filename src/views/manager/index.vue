@@ -138,7 +138,9 @@ export default {
     let user_detail=store.state.user_detail;
     user.page=JSON.parse(sessionStorage.getItem("user")).page
     user.username=JSON.parse(sessionStorage.getItem("user")).username
-    user_detail=JSON.parse(sessionStorage.getItem("user_detail"))
+    if(JSON.parse(sessionStorage.getItem("user_detail"))!=null){
+      user_detail=JSON.parse(sessionStorage.getItem("user_detail"))
+    }
     user.key=key[user.page]
     return {
       user,role,user_detail
