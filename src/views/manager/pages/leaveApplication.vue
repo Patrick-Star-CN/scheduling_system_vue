@@ -145,19 +145,19 @@ onMounted(fetchLeaveRecords);
         okText="确认"
         cancelText="取消"
     >
-    <div class="form-item">
-      <label>选择日期：</label>
-      <DatePicker v-model:value="leaveDate" placeholder="选择日期" />
-    </div>
-    <div class="form-item">
-      <label>选择班次：</label>
-      <Select v-model:value="selectedShift" placeholder="选择班次" style="width: 150px;">
-        <Select.Option v-for="shift in shifts" :key="shift" :value="shift">
-          {{ shift }}
-        </Select.Option>
-      </Select>
-    </div>
-  </Modal>
+      <div class="form-item">
+        <label>选择日期：</label>
+        <DatePicker v-model:value="leaveDate" placeholder="选择日期" />
+      </div>
+      <div class="form-item">
+        <label>选择班次：</label>
+        <Select v-model:value="selectedShift" placeholder="选择班次" style="width: 150px;">
+          <Select.Option v-for="shift in shifts" :key="shift" :value="shift">
+            {{ shift }}
+          </Select.Option>
+        </Select>
+      </div>
+    </Modal>
   </div>
 </template>
 

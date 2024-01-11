@@ -65,6 +65,9 @@ export default {
                 if(role==="CASHIER"||role==="STORAGE"||role==="CUSTOMER_SERVICE"){
                   router.push("/worker/index")
                 }
+                else if(role==="GROUP_MANAGER"){
+                  router.push("/groupManager/index")
+                }
                 else if(role==="SUPER_ADMIN"){
                   router.push("/superManager/index")
                 }

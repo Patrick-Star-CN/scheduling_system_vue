@@ -81,23 +81,23 @@
 <script>
 import router from "@/router";
 import {message, notification} from "ant-design-vue";
-import Home from "@/views/manager/pages/home.vue";
-import Edit from "@/views/manager/pages/edit.vue";
+import Home from "@/views/group_manager/pages/home.vue";
+import Edit from "@/views/group_manager/pages/edit.vue";
 import {useStore} from "vuex";
-import Add from "@/views/manager/pages/add.vue";
-import Review from "@/views/manager/pages/review.vue";
-import LeaveApplication from "@/views/manager/pages/leaveApplication.vue";
+import Add from "@/views/group_manager/pages/add.vue";
+import Review from "@/views/group_manager/pages/review.vue";
+import LeaveApplication from "@/views/group_manager/pages/leaveApplication.vue";
 import axios from "axios";
 
 export default {
-  components: {Add,Edit,LeaveApplication, Home,Review},
+  components: {Add,Edit, LeaveApplication,Home,Review},
   setup() {
     const key={
       "home":'1',
       "edit":'2',
       'add':'3',
       'review':'4',
-      'leaveApplication':'5'
+      'leaveApplication':5,
     }
     const store = useStore()
     const role=store.state.role;
