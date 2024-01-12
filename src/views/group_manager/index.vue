@@ -13,19 +13,15 @@
           <EditOutlined/>
           <span>修改个人信息</span>
         </a-menu-item>
-        <a-menu-item key="3" @click="change_page('add')">
-          <PlusCircleOutlined/>
-          <span>增加用户信息</span>
-        </a-menu-item>
-        <a-menu-item key="4" @click="change_page('review')">
+        <a-menu-item key="3" @click="change_page('review')">
           <PlusCircleOutlined/>
           <span>审核请假记录</span>
         </a-menu-item>
-        <a-menu-item key="5" @click="change_page('leaveApplication')">
+        <a-menu-item key="4" @click="change_page('leaveApplication')">
           <ToolOutlined/>
           <span>申请请假</span>
         </a-menu-item>
-        <a-menu-item key="6" @click="change_page('manage')">
+        <a-menu-item key="5" @click="change_page('manage')">
           <UserSwitchOutlined/>
           <span>人员管理</span>
         </a-menu-item>
@@ -44,17 +40,16 @@
             <a-breadcrumb-item>首页</a-breadcrumb-item>
             <a-breadcrumb-item v-if="false">个人中心</a-breadcrumb-item>
           </a-breadcrumb>
-          <SearchOutlined class="top"/>
-          <ExpandAltOutlined class="top-right"/>
-          <FontSizeOutlined class="top-right" style="padding-right: 10px"/>
-          <a-avatar shape="square" size="large">
-            <template #icon>
-              <UserOutlined/>
-            </template>
-          </a-avatar>
+          <div class="top">
+            <a-avatar shape="square" size="large">
+              <template #icon>
+                <UserOutlined/>
+              </template>
+            </a-avatar>
+          </div>
           <span style="font-size: 15px">{{ user.username }}</span>
           <a-dropdown>
-            <DownOutlined style="padding-top: 20px;padding-right: 10px"/>
+            <DownOutlined style="padding-right: 30px"/>
             <template #overlay>
               <a-menu>
                 <a-menu-item>
@@ -90,22 +85,20 @@ import {message, notification} from "ant-design-vue";
 import Home from "@/views/group_manager/pages/home.vue";
 import Edit from "@/views/group_manager/pages/edit.vue";
 import {useStore} from "vuex";
-import Add from "@/views/group_manager/pages/add.vue";
 import Review from "@/views/group_manager/pages/review.vue";
 import LeaveApplication from "@/views/group_manager/pages/leaveApplication.vue";
 import axios from "axios";
 
 export default {
-  components: {Add, Edit, LeaveApplication, Home, Review},
+  components: {Edit, LeaveApplication, Home, Review},
 
   setup() {
     const key = {
       "home": '1',
       "edit": '2',
-      'add': '3',
-      'review': '4',
-      'leaveApplication': 5,
-      'manage': '6',
+      'review': '3',
+      'leaveApplication': '4',
+      'manage': '5',
     }
     const store = useStore()
     const role = store.state.role;

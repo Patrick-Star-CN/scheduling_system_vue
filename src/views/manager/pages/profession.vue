@@ -153,7 +153,7 @@ export default {
 </script>
 <template>
   <div style="display: flex;justify-content: flex-end">
-    <a-button size="large" style="margin-bottom: 10px;background-color: #67C23A;color: white"
+    <a-button size="large" style="margin-bottom: 10px;" type="primary"
               @click="increase_open = true">
       <PlusOutlined/>
       增加信息
