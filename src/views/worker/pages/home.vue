@@ -11,7 +11,8 @@ export default {
   },
   data() {
     return {
-      // ...其他数据...
+      currentPage: 1,  // 当前页码
+      pageSize: 3,     // 每页显示的消息数量
       messages: [],
     };
   },
@@ -20,11 +21,22 @@ export default {
     getMessages() {
       axios.get('/api/message')
           .then(response => {
-            this.messages = response.data; // 假设响应数据是消息列表
+            this.messages = response.data.data; // 假设响应数据是消息列表
           })
           .catch(error => {
             console.error('Error fetching messages:', error);
           });
+    },
+    handlePageChange(newPage) {
+      this.currentPage = newPage;
+    },
+  },
+  computed: {
+    // 计算当前页的消息
+    currentMessages() {
+      const start = (this.currentPage - 1) * this.pageSize;
+      const end = start + this.pageSize;
+      return this.messages.slice(start, end);
     }
   },
   created() {
@@ -75,7 +87,7 @@ export default {
       </a-card>
     </a-col>
 
-    <a-col :span="12">
+    <a-col :span="22">
       <div :style="{ display: 'flex', flexDirection: 'row' }">
         <!-- 日历 -->
         <div :style="{ border: '1px solid #d9d9d9', borderRadius: '4px', marginRight: '20px' }">
@@ -84,6 +96,7 @@ export default {
 
         <!-- 消息 -->
         <div :style="{ flexGrow: 1 }">
+          <!-- 使用 currentMessages 替代 messages -->
           <a-col v-for="(message, index) in currentMessages" :key="index">
             <a-card class="message-card" :style="{ borderColor: message.read === 0 ? 'black' : 'grey' }">
               <div class="message-content" :style="{ color: message.read === 0 ? 'black' : 'grey' }">
@@ -92,7 +105,7 @@ export default {
             </a-card>
           </a-col>
           <!-- 分页组件 -->
-          <a-pagination :current="currentPage" :total="messages.length" :pageSize="pageSize" @change="currentPage = $event"/>
+          <a-pagination :current="currentPage" :total="messages.length" :pageSize="pageSize" @change="handlePageChange"/>
         </div>
       </div>
     </a-col>
@@ -115,6 +128,7 @@ export default {
   border-radius: 8px; /* 卡片圆角 */
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); /* 卡片阴影 */
   transition: 0.3s; /* 鼠标悬浮动画效果 */
+  width: 500px;
 }
 
 /* 当鼠标悬浮在卡片上时的样式 */
