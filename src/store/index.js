@@ -35,35 +35,20 @@ export default createStore({
             "SUPER_ADMIN": "系统管理员",
             "STORAGE": "库房",
             "CASHIER": "收银",
-            "CUSTOMER_SERVICE": "导购"
+            "CUSTOMER_SERVICE": "导购",
+            "VICE_MANAGER": "副经理",
+            "GROUP_MANAGER": "小组长"
+
         },
         dialogTableVisible: false,
-        editTableVisible: true
+        editTableVisible: true,
     },
-    role:{
-      "MANAGER":"经理",
-      "SUPER_ADMIN":"系统管理员",
-      "STORAGE":"库房",
-      "CASHIER":"收银",
-      "CUSTOMER_SERVICE":"导购",
-      "VICE_MANAGER":"副经理",
-      "GROUP_MANAGER":"小组长"
-
-    },
-    dialogTableVisible:false,
-    editTableVisible:true
-  },
-  getters: {
-  },
-  mutations: {
-  },
-  actions: {
-  },
-  modules: {
-
-  },
-  plugins: [
-    // 把vuex的数据存储到sessionStorage
-    createPersistedState(),
-  ]
+    getters: {},
+    mutations: {},
+    actions: {},
+    modules: {},
+    plugins: [
+        // 把vuex的数据存储到sessionStorage
+        createPersistedState(),
+    ]
 })
