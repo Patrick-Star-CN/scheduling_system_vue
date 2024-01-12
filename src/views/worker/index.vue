@@ -25,6 +25,14 @@
           <ToolOutlined/>
           <span>申请请假</span>
         </a-menu-item>
+        <a-menu-item key="6" @click="change_page('shift')">
+          <ToolOutlined/>
+          <span>申请换班</span>
+        </a-menu-item>
+        <a-menu-item key="7" @click="change_page('shiftResponse')">
+          <ToolOutlined/>
+          <span>换班响应</span>
+        </a-menu-item>
       </a-menu>
     </a-layout-sider>
     <a-layout>
@@ -40,16 +48,17 @@
             <a-breadcrumb-item>首页</a-breadcrumb-item>
             <a-breadcrumb-item v-if="false">个人中心</a-breadcrumb-item>
           </a-breadcrumb>
-          <div class="top">
-            <a-avatar shape="square" size="large">
-              <template #icon>
-                <UserOutlined/>
-              </template>
-            </a-avatar>
-          </div>
+          <SearchOutlined class="top"/>
+          <ExpandAltOutlined class="top-right"/>
+          <FontSizeOutlined class="top-right" style="padding-right: 10px"/>
+          <a-avatar shape="square" size="large">
+            <template #icon>
+              <UserOutlined/>
+            </template>
+          </a-avatar>
           <span style="font-size: 15px">{{ user.username }}</span>
           <a-dropdown>
-            <DownOutlined style="padding-right: 30px"/>
+            <DownOutlined style="padding-top: 20px;padding-right: 10px"/>
             <template #overlay>
               <a-menu>
                 <a-menu-item>
@@ -73,6 +82,10 @@
         </leave-application>
         <schedule v-if="user.page==='schedule'" :user_detail="user_detail">
         </schedule>
+        <shift v-if="user.page==='shift'" :user_detail="user_detail">
+        </shift>
+        <shift-response v-if="user.page==='shiftResponse'" :user_detail="user_detail">
+        </shift-response>
       </a-layout-content>
     </a-layout>
   </a-layout>
@@ -85,11 +98,13 @@ import Preference from "@/views/worker/pages/preference.vue";
 import Edit from "@/views/worker/pages/edit.vue";
 import LeaveApplication from "@/views/worker/pages/leaveApplication.vue";
 import Schedule from "@/views/worker/pages/schedule.vue";
+import Shift from "@/views/worker/pages/shift.vue";
+import ShiftResponse from "@/views/worker/pages/shiftResponse.vue";
 import {useStore} from "vuex";
 import axios from "axios";
 
 export default {
-  components: {Schedule, LeaveApplication, Edit, Preference, Home},
+  components: {Schedule, LeaveApplication, Edit, Preference, Home, Shift, ShiftResponse},
   setup() {
     const key={
       "home":'1',
@@ -97,6 +112,8 @@ export default {
       "schedule":'3',
       "preference":'4',
       "leaveApplication":'5',
+      "shift":'6',
+      "shiftResponse":'7',
     }
     const store = useStore()
     const role=store.state.role;
@@ -113,12 +130,10 @@ export default {
     return {
       selectedKeys: [this.user.key],
       collapsed: false,
-      user_detail:{},
-
+      user_detail:{}
     }
   },
   methods: {
-
     exit() {
       router.push("/");
       notification["info"]({
@@ -145,12 +160,10 @@ export default {
           .catch(error => {
             console.error('Error fetching data:', error);
           });
-    },
-
+    }
   },
-
   created() {
-    this.get_user_detail();
+    this.get_user_detail()
   }
 }
 </script>
