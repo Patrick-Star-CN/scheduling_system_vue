@@ -77,9 +77,6 @@ export default {
                 else if(role==="VICE_MANAGER"){
                   router.push("/viceManager/index")
                 }
-                else if(role==="GROUP_MANAGER"){
-                  router.push("/groupManager/index")
-                }
                 notification["success"]({
                   message: '登录成功',
                   description:
