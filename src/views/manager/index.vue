@@ -123,7 +123,6 @@ import AddStoreRelu from "@/views/manager/pages/addStoreRelu.vue";
 import Schedule from "@/views/manager/pages/schedule.vue";
 import Flow from "@/views/manager/pages/flow.vue";
 import Profession from "@/views/manager/pages/profession.vue";
-import Review from "@/views/group_manager/pages/review.vue";
 import Group from "@/views/manager/pages/group.vue";
 export default {
   inject:["reload"],
@@ -137,8 +136,8 @@ export default {
       "schedule":'5',
       "flow":'6',
       "profession":'7',
-      'leaveApplication':'8'
-      "review":'9'，
+      'leaveApplication':'8',
+      "review":'9',
       "group":"10"
     }
     const store = useStore()
