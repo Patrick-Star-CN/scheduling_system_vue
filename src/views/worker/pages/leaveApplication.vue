@@ -78,6 +78,7 @@ const Delete = (column, record) => {
 const columns = [
   {
     title: '编号',
+    dataIndex: 'id',
     key: 'id',
     width: 50 // 小一点的宽度，例如100像素
   },
@@ -107,8 +108,6 @@ const hideLeaveModal = () => {
 };
 
 onMounted(fetchLeaveRecords);
-// 初始的假数据
-
 
 
 </script>
@@ -135,6 +134,7 @@ onMounted(fetchLeaveRecords);
     </span>
         </template>
         <!-- 此处可以添加其他列的条件渲染 -->
+
       </template>
     </a-table>
     <Modal

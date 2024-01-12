@@ -24,6 +24,9 @@
         <a-menu-item key="5" @click="change_page('leaveApplication')">
           <ToolOutlined/>
           <span>申请请假</span>
+        <a-menu-item key="6" @click="change_page('manage')">
+          <UserSwitchOutlined />
+          <span>人员管理</span>
         </a-menu-item>
       </a-menu>
     </a-layout-sider>
@@ -74,6 +77,8 @@
         </review>
         <leaveApplication v-if="user.page==='leaveApplication'">
         </leaveApplication>
+        <manage v-if="user.page==='manage'">
+        </manage>
       </a-layout-content>
     </a-layout>
   </a-layout>
@@ -87,10 +92,14 @@ import {useStore} from "vuex";
 import Add from "@/views/group_manager/pages/add.vue";
 import Review from "@/views/group_manager/pages/review.vue";
 import LeaveApplication from "@/views/group_manager/pages/leaveApplication.vue";
+import Manage from "@/views/group_manager/pages/manage.vue";
 import axios from "axios";
 
 export default {
   components: {Add,Edit, LeaveApplication,Home,Review},
+
+export default {
+  components: { Edit, Home, Review, Manage},
   setup() {
     const key={
       "home":'1',
@@ -98,11 +107,13 @@ export default {
       'add':'3',
       'review':'4',
       'leaveApplication':5,
+      'manage':'6',
     }
     const store = useStore()
     const role=store.state.role;
     const user=store.state.user;
     user.page=JSON.parse(sessionStorage.getItem("user")).page
+    user.username=JSON.parse(sessionStorage.getItem("user")).username
     user.key=key[user.page]
     console.log(user)
     return {

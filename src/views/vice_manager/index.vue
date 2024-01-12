@@ -13,13 +13,9 @@
           <EditOutlined/>
           <span>修改个人信息</span>
         </a-menu-item>
-        <a-menu-item key="3" @click="change_page('add')">
-          <PlusCircleOutlined />
-          <span>增加用户信息</span>
-        </a-menu-item>
-        <a-menu-item key="4" @click="change_page('store')">
-          <MonitorOutlined/>
-          <span>门店管理</span>
+        <a-menu-item key="3" @click="change_page('group')">
+          <PlusSquareOutlined />
+          <span>管理组别信息</span>
         </a-menu-item>
       </a-menu>
     </a-layout-sider>
@@ -64,10 +60,8 @@
         </home>
         <edit v-if="user.page==='edit'">
         </edit>
-        <store v-if="user.page==='store'">
-        </store>
-        <add v-if="user.page==='add'">
-        </add>
+        <group v-if="user.page==='group'">
+        </group>
       </a-layout-content>
     </a-layout>
   </a-layout>
@@ -75,25 +69,23 @@
 <script>
 import router from "@/router";
 import {message, notification} from "ant-design-vue";
-import Home from "@/views/super_manager/pages/home.vue";
-import Store from "@/views/super_manager/pages/store.vue";
-import Edit from "@/views/super_manager/pages/edit.vue";
+import Home from "@/views/vice_manager/pages/home.vue";
+import Edit from "@/views/vice_manager/pages/edit.vue";
 import {useStore} from "vuex";
-import Add from "@/views/super_manager/pages/add.vue";
 import axios from "axios";
+import Group from "@/views/vice_manager/pages/group.vue";
 
 export default {
-  components: {Add, Store,Edit, Home},
+  components: { Group, Edit, Home},
   setup() {
     const key={
       "home":'1',
       "edit":'2',
-      'add':'3',
-      "store":'4',
+      "group":'3'
     }
     const store = useStore()
-    const user=store.state.user;
     const role=store.state.role;
+    const user=store.state.user;
     user.page=JSON.parse(sessionStorage.getItem("user")).page
     user.username=JSON.parse(sessionStorage.getItem("user")).username
     user.key=key[user.page]
