@@ -9,14 +9,6 @@ export default {
     const store = useStore();
     const user = store.state.user
     const Store = store.state.store
-    axios.get('/api/store', {})
-        .then(response => {
-          Store.detail = response.data.data;
-        })
-        .catch(error => {
-          console.error('Error fetching data:', error);
-        });
-    console.log(Store)
     return {store, user, Store}
   },
 
@@ -24,50 +16,55 @@ export default {
     return {
       columns: [
         {
+          title: '组别编号',
+          dataIndex: 'id',
+          key: 'id',
+        },
+        {
           title: '商店编号',
           dataIndex: 'store_id',
           key: 'store_id',
         },
         {
-          title: '商店名字',
+          title: '管理员编号',
+          dataIndex: 'manager_id',
+          key: 'manager_id',
+        },
+        {
+          title: '组别名称',
           dataIndex: 'name',
           key: 'name',
         },
         {
-          title: '商店地址',
-          dataIndex: 'address',
-          key: 'address',
-        },
-        {
-          title: '商店大小',
-          dataIndex: 'size',
-          key: 'size',
+          title: '工种名称',
+          dataIndex: 'type',
+          key: 'type',
         },
         {
           title: '操作',
           key: 'action',
         },
       ],
-      increase_store: {
-        store_id: "",
-        name: "",
-        address: "",
-        size: ""
+      increase_group: {
+        manager_id: "",
+        name:""
       },
-      edit_store: {
+      edit_group: {
+        id: "",
         store_id: "",
-        name: "",
-        address: "",
-        size: ""
+        manager_id: "",
+        name:"",
+        type: ""
       },
       increase_open: false,
       edit_open: false,
+      detail:''
     }
   },
   methods: {
     Delete(column, record) {
       console.log(column, record)
-      axios.delete('/api/store/' + record.store_id, {})
+      axios.delete('/api/group/' + record.id, {})
           .then(response => {
             this.data = response.data;
             if (this.data.msg === "success") {
@@ -75,6 +72,7 @@ export default {
               this.reload()
             } else {
               message.error('删除失败！');
+              this.reload()
             }
           })
           .catch(error => {
@@ -83,17 +81,20 @@ export default {
 
     },
     edit(column, record) {
-      this.edit_store=record
+      this.edit_group=record
       this.edit_open = true
+    },
+    editCancel(){
+      this.reload()
     },
     editOk() {
       this.edit_open = false;
-      this.edit_store.size=parseFloat(this.edit_store.size)
-      axios.put('/api/store', {
-        store_id: this.edit_store.store_id,
-        name: this.edit_store.name,
-        address: this.edit_store.address,
-        size:this.edit_store.size
+      axios.put('/api/group', {
+        id: this.edit_group.id,
+        store_id: this.edit_group.store_id,
+        manager_id: this.edit_group.manager_id,
+        name:this.edit_group.name,
+        type:this.edit_group.type
       })
           .then(response => {
             console.log(response.data)
@@ -103,6 +104,7 @@ export default {
               this.reload()
             } else {
               message.error('修改失败！');
+              this.reload()
             }
           })
           .catch(error => {
@@ -111,19 +113,15 @@ export default {
       this.edit_open = !this.edit_open
     },
     increaseOk() {
-      console.log(this.increase_store)
-      if (this.increase_store.store_id === "" || this.increase_store.name === "" ||
-          this.increase_store.address === "" || this.increase_store.size === "") {
+      console.log(this.increase_group)
+      if (this.increase_group.manager_id === "" || this.increase_group.name === "") {
         message.error("无法添加，未完整输入信息")
       } else {
         this.increase_open = false;
-        this.increase_store.size=parseFloat(this.increase_store.size)
-        console.log(this.increase_store)
-        axios.post('/api/store', {
-          store_id: this.increase_store.store_id,
-          name: this.increase_store.name,
-          address: this.increase_store.address,
-          size:this.increase_store.size
+        console.log(this.increase_group)
+        axios.post('/api/group/' + this.increase_group.manager_id + '/' + this.increase_group.name, {
+          manager_id: this.increase_group.manager_id,
+          name:this.increase_group.name
         })
             .then(response => {
               this.data = response.data;
@@ -132,13 +130,30 @@ export default {
                 this.reload()
               } else {
                 message.error('添加失败！');
+                this.reload()
               }
             })
             .catch(error => {
               console.error('Error fetching data:', error);
             });
       }
+    },
+    get_group(){
+      axios.get('/api/group', {})
+          .then(response => {
+            this.data = response.data;
+            if (this.data.msg === "success") {
+              this.detail = this.data.data;
+              console.log(this.detail);
+            }
+          })
+          .catch(error => {
+            console.error('Error fetching data:', error);
+          });
     }
+  },
+  created() {
+    this.get_group();
   }
 }
 </script>
@@ -151,7 +166,7 @@ export default {
       增加信息
     </a-button>
   </div>
-  <a-table :columns="columns" :data-source="Store.detail" :pagination="{ pageSize: 6 }">
+  <a-table :columns="columns" :data-source="this.detail" :pagination="{ pageSize: 6 }">
     <template #bodyCell="{ column, record }">
       <template v-if="column.key === 'action'">
         <span>
@@ -170,94 +185,75 @@ export default {
   </a-table>
 
   <a-modal title="修改信息" v-model:open="edit_open" @ok="editOk" okText="保存"
-           cancelText="退出">
+           @cancel="editCancel" cancelText="退出">
     <a-form
-        :model="edit_store"
+        :model="edit_group"
         :label-col="{ span: 6 }"
         :wrapper-col="{ span: 16 }"
         autocomplete="off"
     >
       <a-form-item
-          label="商店编号"
-          name="store_id"
-          :rules="[{ required: true, message: '请输入商店的编号id!' }]"
+          label="组别编号"
+          name="id"
+          :rules="[{ required: true, message: '请输入工种的编号id!' }]"
       >
-        <a-input-number id="inputNumber" style="width: 100%" v-model:value="edit_store.store_id" :min="1"
+        <a-input-number id="inputNumber" style="width: 100%" v-model:value="edit_group.id" :min="1"
                         :max="100000" disabled="disabled"/>
       </a-form-item>
       <a-form-item
-          label="商店名字"
+          label="商店编号"
+          name="store_id"
+          :rules="[{ required: true, message: '请输入商店的编号!' }]"
+      >
+        <a-input-number id="inputNumber" style="width: 100%" v-model:value="edit_group.store_id" :min="1"
+                        :max="100000" disabled="disabled"/>
+      </a-form-item>
+      <a-form-item
+          label="管理员编号"
+          name="manager_id"
+          :rules="[{ required: true, message: '请输入管理员的编号!' }]"
+      >
+        <a-input-number id="inputNumber" style="width: 100%" v-model:value="edit_group.manager_id" :min="1"
+                        :max="100000"/>
+      </a-form-item>
+      <a-form-item
+          label="组别名称"
           name="name"
-          :rules="[{ required: true, message: '请输入商店的名字!' }]"
+          :rules="[{ required: true, message: '请输入组别的名称!' }]"
       >
-        <a-input v-model:value="edit_store.name"/>
+        <a-input v-model:value="edit_group.name"/>
       </a-form-item>
       <a-form-item
-          label="商店地址"
-          name="address"
-          :rules="[{ required: true, message: '请输入商店的地址!' }]"
+          label="工种名称"
+          name="type"
+          :rules="[{ required: true, message: '请输入工种的名称!' }]"
       >
-        <a-input v-model:value="edit_store.address"/>
-      </a-form-item>
-      <a-form-item
-          label="商店面积"
-          name="size"
-          :rules="[{ required: true, message: '请输入商店的面积!' }]"
-      >
-        <a-input-number
-            v-model:value="edit_store.size"
-            style="width: 100%"
-            :min="0"
-            :max="10000"
-            :step="0.001"
-            string-mode
-        />
+        <a-input v-model:value="edit_group.type" disabled="disabled"/>
       </a-form-item>
     </a-form>
   </a-modal>
   <a-modal title="增添信息" v-model:open="increase_open" @ok="increaseOk" okText="确认"
            cancelText="退出">
     <a-form
-        :model="increase_store"
+        :model="increase_group"
         :label-col="{ span: 6 }"
         :wrapper-col="{ span: 16 }"
         autocomplete="off"
     >
       <a-form-item
-          label="商店编号"
-          name="store_id"
-          :rules="[{ required: true, message: '请输入商店的编号id!' }]"
+          label="管理员编号"
+          name="manager_id"
+          :rules="[{ required: true, message: '请输入管理员的编号!' }]"
       >
-        <a-input-number id="inputNumber" style="width: 100%" v-model:value="increase_store.store_id" :min="1"
+        <a-input-number id="inputNumber" style="width: 100%" v-model:value="increase_group.manager_id" :min="1"
                         :max="100000"/>
       </a-form-item>
       <a-form-item
-          label="商店名字"
+          label="组别名称"
           name="name"
-          :rules="[{ required: true, message: '请输入商店的名字!' }]"
+          :rules="[{ required: true, message: '请输入组别的名称!' }]"
       >
-        <a-input v-model:value="increase_store.name"/>
-      </a-form-item>
-      <a-form-item
-          label="商店地址"
-          name="address"
-          :rules="[{ required: true, message: '请输入商店的地址!' }]"
-      >
-        <a-input v-model:value="increase_store.address"/>
-      </a-form-item>
-      <a-form-item
-          label="商店面积"
-          name="size"
-          :rules="[{ required: true, message: '请输入商店的面积!' }]"
-      >
-        <a-input-number
-            v-model:value="increase_store.size"
-            style="width: 100%"
-            :min="0"
-            :max="10000"
-            :step="0.001"
-            string-mode
-        />
+        <a-input v-model:value="increase_group.name"/>
       </a-form-item>
     </a-form>
   </a-modal>

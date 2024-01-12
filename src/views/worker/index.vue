@@ -40,17 +40,16 @@
             <a-breadcrumb-item>首页</a-breadcrumb-item>
             <a-breadcrumb-item v-if="false">个人中心</a-breadcrumb-item>
           </a-breadcrumb>
-          <SearchOutlined class="top"/>
-          <ExpandAltOutlined class="top-right"/>
-          <FontSizeOutlined class="top-right" style="padding-right: 10px"/>
-          <a-avatar shape="square" size="large">
-            <template #icon>
-              <UserOutlined/>
-            </template>
-          </a-avatar>
+          <div class="top">
+            <a-avatar shape="square" size="large">
+              <template #icon>
+                <UserOutlined/>
+              </template>
+            </a-avatar>
+          </div>
           <span style="font-size: 15px">{{ user.username }}</span>
           <a-dropdown>
-            <DownOutlined style="padding-top: 20px;padding-right: 10px"/>
+            <DownOutlined style="padding-right: 30px"/>
             <template #overlay>
               <a-menu>
                 <a-menu-item>
@@ -72,7 +71,7 @@
         </edit>
         <leave-application v-if="user.page==='leaveApplication'">
         </leave-application>
-        <schedule v-if="user.page==='schedule'">
+        <schedule v-if="user.page==='schedule'" :user_detail="user_detail">
         </schedule>
       </a-layout-content>
     </a-layout>
@@ -103,6 +102,7 @@ export default {
     const role=store.state.role;
     const user=store.state.user;
     user.page=JSON.parse(sessionStorage.getItem("user")).page
+    user.username=JSON.parse(sessionStorage.getItem("user")).username
     user.key=key[user.page]
     console.log(user)
     return {

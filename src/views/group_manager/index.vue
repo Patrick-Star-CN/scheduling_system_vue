@@ -13,17 +13,17 @@
           <EditOutlined/>
           <span>修改个人信息</span>
         </a-menu-item>
-        <a-menu-item key="3" @click="change_page('add')">
-          <PlusCircleOutlined />
-          <span>增加用户信息</span>
-        </a-menu-item>
-        <a-menu-item key="4" @click="change_page('review')">
-          <PlusCircleOutlined />
+        <a-menu-item key="3" @click="change_page('review')">
+          <PlusCircleOutlined/>
           <span>审核请假记录</span>
         </a-menu-item>
-        <a-menu-item key="5" @click="change_page('leaveApplication')">
+        <a-menu-item key="4" @click="change_page('leaveApplication')">
           <ToolOutlined/>
           <span>申请请假</span>
+        </a-menu-item>
+        <a-menu-item key="5" @click="change_page('manage')">
+          <UserSwitchOutlined/>
+          <span>人员管理</span>
         </a-menu-item>
       </a-menu>
     </a-layout-sider>
@@ -40,17 +40,16 @@
             <a-breadcrumb-item>首页</a-breadcrumb-item>
             <a-breadcrumb-item v-if="false">个人中心</a-breadcrumb-item>
           </a-breadcrumb>
-          <SearchOutlined class="top"/>
-          <ExpandAltOutlined class="top-right"/>
-          <FontSizeOutlined class="top-right" style="padding-right: 10px"/>
-          <a-avatar shape="square" size="large">
-            <template #icon>
-              <UserOutlined/>
-            </template>
-          </a-avatar>
+          <div class="top">
+            <a-avatar shape="square" size="large">
+              <template #icon>
+                <UserOutlined/>
+              </template>
+            </a-avatar>
+          </div>
           <span style="font-size: 15px">{{ user.username }}</span>
           <a-dropdown>
-            <DownOutlined style="padding-top: 20px;padding-right: 10px"/>
+            <DownOutlined style="padding-right: 30px"/>
             <template #overlay>
               <a-menu>
                 <a-menu-item>
@@ -74,6 +73,8 @@
         </review>
         <leaveApplication v-if="user.page==='leaveApplication'">
         </leaveApplication>
+        <manage v-if="user.page==='manage'">
+        </manage>
       </a-layout-content>
     </a-layout>
   </a-layout>
@@ -84,36 +85,37 @@ import {message, notification} from "ant-design-vue";
 import Home from "@/views/group_manager/pages/home.vue";
 import Edit from "@/views/group_manager/pages/edit.vue";
 import {useStore} from "vuex";
-import Add from "@/views/group_manager/pages/add.vue";
 import Review from "@/views/group_manager/pages/review.vue";
 import LeaveApplication from "@/views/group_manager/pages/leaveApplication.vue";
 import axios from "axios";
 
 export default {
-  components: {Add,Edit, LeaveApplication,Home,Review},
+  components: {Edit, LeaveApplication, Home, Review},
+
   setup() {
-    const key={
-      "home":'1',
-      "edit":'2',
-      'add':'3',
-      'review':'4',
-      'leaveApplication':5,
+    const key = {
+      "home": '1',
+      "edit": '2',
+      'review': '3',
+      'leaveApplication': '4',
+      'manage': '5',
     }
     const store = useStore()
-    const role=store.state.role;
-    const user=store.state.user;
-    user.page=JSON.parse(sessionStorage.getItem("user")).page
-    user.key=key[user.page]
+    const role = store.state.role;
+    const user = store.state.user;
+    user.page = JSON.parse(sessionStorage.getItem("user")).page
+    user.username = JSON.parse(sessionStorage.getItem("user")).username
+    user.key = key[user.page]
     console.log(user)
     return {
-      user,role
+      user, role
     }
   },
   data() {
     return {
       selectedKeys: [this.user.key],
       collapsed: false,
-      user_detail:{}
+      user_detail: {}
     }
   },
   methods: {
@@ -125,16 +127,16 @@ export default {
             '返回登录界面',
       });
     },
-    change_page(name){
-      this.user.page=name;
-      sessionStorage.setItem("user",JSON.stringify(this.user))
+    change_page(name) {
+      this.user.page = name;
+      sessionStorage.setItem("user", JSON.stringify(this.user))
     },
-    get_user_detail(){
+    get_user_detail() {
       axios.get('/api/user', {})
           .then(response => {
             this.data = response.data;
             if (this.data.msg === "success") {
-              this.user_detail=this.data.data;
+              this.user_detail = this.data.data;
             } else {
               message.warn("查询用户具体信息失败")
             }

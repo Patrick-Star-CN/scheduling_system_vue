@@ -17,13 +17,33 @@
           <PlusCircleOutlined />
           <span>增加用户信息</span>
         </a-menu-item>
-        <a-menu-item key="4" @click="change_page('review')">
+        <a-menu-item key="4" @click="change_page('addStoreRelu')">
+          <PlusSquareOutlined />
+          <span>增加门店信息</span>
+        </a-menu-item>
+        <a-menu-item key="5" @click="change_page('schedule')">
+          <MonitorOutlined/>
+          <span>查看排班</span>
+        </a-menu-item>
+        <a-menu-item key="6" @click="change_page('flow')">
+          <FormOutlined />
+          <span>导入客流信息</span>
+        </a-menu-item>
+        <a-menu-item key="7" @click="change_page('profession')">
+          <UserSwitchOutlined />
+          <span>管理工种信息</span>
+        </a-menu-item>
+        <a-menu-item key="8" @click="change_page('leaveApplication')">
           <PlusCircleOutlined />
           <span>审核请假记录</span>
         </a-menu-item>
-        <a-menu-item key="5" @click="change_page('leaveApplication')">
-          <ToolOutlined/>
-          <span>申请请假</span>
+        <a-menu-item key="9" @click="change_page('review')">
+          <SearchOutlined />
+          <span>审核请假</span>
+        </a-menu-item>
+        <a-menu-item key="10" @click="change_page('group')">
+          <PlusSquareOutlined />
+          <span>管理组别信息</span>
         </a-menu-item>
       </a-menu>
     </a-layout-sider>
@@ -40,17 +60,17 @@
             <a-breadcrumb-item>首页</a-breadcrumb-item>
             <a-breadcrumb-item v-if="false">个人中心</a-breadcrumb-item>
           </a-breadcrumb>
-          <SearchOutlined class="top"/>
-          <ExpandAltOutlined class="top-right"/>
-          <FontSizeOutlined class="top-right" style="padding-right: 10px"/>
-          <a-avatar shape="square" size="large">
-            <template #icon>
-              <UserOutlined/>
-            </template>
-          </a-avatar>
+          <FieldTimeOutlined class="top" id="generate" @click="generate_shift" v-if="user.page==='schedule'"/>
+          <div class="top">
+            <a-avatar shape="square" size="large">
+              <template #icon>
+                <UserOutlined/>
+              </template>
+            </a-avatar>
+          </div>
           <span style="font-size: 15px">{{ user.username }}</span>
           <a-dropdown>
-            <DownOutlined style="padding-top: 20px;padding-right: 10px"/>
+            <DownOutlined style="padding-right: 30px"/>
             <template #overlay>
               <a-menu>
                 <a-menu-item>
@@ -70,10 +90,20 @@
         </edit>
         <add v-if="user.page==='add'">
         </add>
-        <review v-if="user.page==='review'">
-        </review>
+        <add-store-relu v-if="user.page==='addStoreRelu'">
+        </add-store-relu>
+        <schedule v-if="user.page==='schedule'" :user_detail="user_detail" :refresh="refresh">
+        </schedule>
+        <flow v-if="user.page==='flow'">
+        </flow>
+        <profession v-if="user.page==='profession'">
+        </profession>
         <leaveApplication v-if="user.page==='leaveApplication'">
         </leaveApplication>
+        <review v-if="user.page==='review'">
+        </review>
+         <group v-if="user.page==='group'">
+        </group>
       </a-layout-content>
     </a-layout>
   </a-layout>
@@ -88,32 +118,46 @@ import Add from "@/views/manager/pages/add.vue";
 import Review from "@/views/manager/pages/review.vue";
 import LeaveApplication from "@/views/manager/pages/leaveApplication.vue";
 import axios from "axios";
-
+import AddStoreRelu from "@/views/manager/pages/addStoreRelu.vue";
+import Schedule from "@/views/manager/pages/schedule.vue";
+import Flow from "@/views/manager/pages/flow.vue";
+import Profession from "@/views/manager/pages/profession.vue";
+import Group from "@/views/manager/pages/group.vue";
 export default {
-  components: {Add,Edit,LeaveApplication, Home,Review},
+  inject:["reload"],
+  components: {Review, Profession, Group, Flow, Schedule, AddStoreRelu, Add,Edit, Home, LeaveApplication },
   setup() {
     const key={
       "home":'1',
       "edit":'2',
       'add':'3',
-      'review':'4',
-      'leaveApplication':'5'
+      "addStoreRelu":'4',
+      "schedule":'5',
+      "flow":'6',
+      "profession":'7',
+      'leaveApplication':'8',
+      "review":'9',
+      "group":"10"
     }
     const store = useStore()
     const role=store.state.role;
     const user=store.state.user;
+    let user_detail=store.state.user_detail;
     user.page=JSON.parse(sessionStorage.getItem("user")).page
+    user.username=JSON.parse(sessionStorage.getItem("user")).username
+    if(JSON.parse(sessionStorage.getItem("user_detail"))!=null){
+      user_detail=JSON.parse(sessionStorage.getItem("user_detail"))
+    }
     user.key=key[user.page]
-    console.log(user)
     return {
-      user,role
+      user,role,user_detail
     }
   },
   data() {
     return {
       selectedKeys: [this.user.key],
       collapsed: false,
-      user_detail:{}
+      refresh:false,
     }
   },
   methods: {
@@ -135,8 +179,33 @@ export default {
             this.data = response.data;
             if (this.data.msg === "success") {
               this.user_detail=this.data.data;
+              sessionStorage.setItem("user_detail",JSON.stringify(this.user_detail))
             } else {
               message.warn("查询用户具体信息失败")
+            }
+          })
+          .catch(error => {
+            console.error('Error fetching data:', error);
+          });
+    },
+    generate_shift(){
+      this.refresh=true;
+      axios.post('/api/shift/'+this.user_detail.store_id, {})
+          .then(response => {
+            this.data = response.data;
+            if (this.data.msg === "success") {
+              notification["success"]({
+                message: '生成排班情况',
+                description:
+                    '自动生成排班成功',
+              });
+              this.reload()
+            } else {
+              notification["error"]({
+                message: '生成排班情况',
+                description:
+                    '自动生成排班失败',
+              });
             }
           })
           .catch(error => {
@@ -145,7 +214,7 @@ export default {
     }
   },
   created() {
-    this.get_user_detail()
+      this.get_user_detail()
   }
 }
 </script>
@@ -199,5 +268,20 @@ export default {
   padding-left: 10px;
   font-size: 30px;
   line-height: 64px;
+}
+#generate{
+  padding-right: 10px;
+  animation-name: example;
+  animation-duration: 4s;
+  animation-iteration-count: infinite;
+}
+#generate:hover{
+  cursor: pointer;
+}
+@keyframes example {
+  0%   {color: red;}
+  25%  {color: orange;}
+  50%  {color: deeppink;}
+  100% {color: pink;}
 }
 </style>

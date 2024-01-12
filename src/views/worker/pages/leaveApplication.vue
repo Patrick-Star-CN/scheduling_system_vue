@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue';
-import { DatePicker, Modal, Button, Select, MinusOutlined, Divider } from 'ant-design-vue';
+import { DatePicker, Modal, Select, MinusOutlined, Divider } from 'ant-design-vue';
 import axios from "axios";
 
 // 请假记录
@@ -78,6 +78,7 @@ const Delete = (column, record) => {
 const columns = [
   {
     title: '编号',
+    dataIndex: 'id',
     key: 'id',
     width: 50 // 小一点的宽度，例如100像素
   },
@@ -107,8 +108,6 @@ const hideLeaveModal = () => {
 };
 
 onMounted(fetchLeaveRecords);
-// 初始的假数据
-
 
 
 </script>
@@ -117,7 +116,11 @@ onMounted(fetchLeaveRecords);
 
 <template>
   <div style="display: flex;justify-content: flex-end">
-    <Button @click="showLeaveModal" size="large" style="margin-bottom: 10px;background-color: #67C23A;color: white">+增加请假记录</Button>
+    <a-button @click="showLeaveModal" size="large" style="margin-bottom: 10px"
+            type="primary" >
+      <PlusOutlined/>
+      增加请假记录
+    </a-button>
   </div>
   <div>
     <a-table :columns="columns" :data-source="leaveRecords" :pagination="{ pageSize: 6 }">
@@ -135,6 +138,7 @@ onMounted(fetchLeaveRecords);
     </span>
         </template>
         <!-- 此处可以添加其他列的条件渲染 -->
+
       </template>
     </a-table>
     <Modal
