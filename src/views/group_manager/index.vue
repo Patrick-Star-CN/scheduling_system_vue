@@ -13,11 +13,18 @@
           <EditOutlined/>
           <span>修改个人信息</span>
         </a-menu-item>
-        <a-menu-item key="3" @click="change_page('review')">
+        <a-menu-item key="3" @click="change_page('add')">
+          <PlusCircleOutlined />
+          <span>增加用户信息</span>
+        </a-menu-item>
+        <a-menu-item key="4" @click="change_page('review')">
           <PlusCircleOutlined />
           <span>审核请假记录</span>
         </a-menu-item>
-        <a-menu-item key="4" @click="change_page('manage')">
+        <a-menu-item key="5" @click="change_page('leaveApplication')">
+          <ToolOutlined/>
+          <span>申请请假</span>
+        <a-menu-item key="6" @click="change_page('manage')">
           <UserSwitchOutlined />
           <span>人员管理</span>
         </a-menu-item>
@@ -64,8 +71,12 @@
         </home>
         <edit v-if="user.page==='edit'">
         </edit>
+        <add v-if="user.page==='add'">
+        </add>
         <review v-if="user.page==='review'">
         </review>
+        <leaveApplication v-if="user.page==='leaveApplication'">
+        </leaveApplication>
         <manage v-if="user.page==='manage'">
         </manage>
       </a-layout-content>
@@ -78,9 +89,14 @@ import {message, notification} from "ant-design-vue";
 import Home from "@/views/group_manager/pages/home.vue";
 import Edit from "@/views/group_manager/pages/edit.vue";
 import {useStore} from "vuex";
+import Add from "@/views/group_manager/pages/add.vue";
 import Review from "@/views/group_manager/pages/review.vue";
+import LeaveApplication from "@/views/group_manager/pages/leaveApplication.vue";
 import Manage from "@/views/group_manager/pages/manage.vue";
 import axios from "axios";
+
+export default {
+  components: {Add,Edit, LeaveApplication,Home,Review},
 
 export default {
   components: { Edit, Home, Review, Manage},
@@ -88,8 +104,10 @@ export default {
     const key={
       "home":'1',
       "edit":'2',
-      'review':'3',
-      'manage':'4',
+      'add':'3',
+      'review':'4',
+      'leaveApplication':5,
+      'manage':'6',
     }
     const store = useStore()
     const role=store.state.role;

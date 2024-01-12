@@ -33,11 +33,15 @@
           <UserSwitchOutlined />
           <span>管理工种信息</span>
         </a-menu-item>
-        <a-menu-item key="8" @click="change_page('review')">
+        <a-menu-item key="8" @click="change_page('leaveApplication')">
+          <PlusCircleOutlined />
+          <span>审核请假记录</span>
+        </a-menu-item>
+        <a-menu-item key="9" @click="change_page('review')">
           <SearchOutlined />
           <span>审核请假</span>
         </a-menu-item>
-        <a-menu-item key="9" @click="change_page('group')">
+        <a-menu-item key="10" @click="change_page('group')">
           <PlusSquareOutlined />
           <span>管理组别信息</span>
         </a-menu-item>
@@ -95,6 +99,8 @@
         </flow>
         <profession v-if="user.page==='profession'">
         </profession>
+        <leaveApplication v-if="user.page==='leaveApplication'">
+        </leaveApplication>
         <review v-if="user.page==='review'">
         </review>
          <group v-if="user.page==='group'">
@@ -110,6 +116,8 @@ import Home from "@/views/manager/pages/home.vue";
 import Edit from "@/views/manager/pages/edit.vue";
 import {useStore} from "vuex";
 import Add from "@/views/manager/pages/add.vue";
+import Review from "@/views/manager/pages/review.vue";
+import LeaveApplication from "@/views/manager/pages/leaveApplication.vue";
 import axios from "axios";
 import AddStoreRelu from "@/views/manager/pages/addStoreRelu.vue";
 import Schedule from "@/views/manager/pages/schedule.vue";
@@ -119,7 +127,7 @@ import Review from "@/views/group_manager/pages/review.vue";
 import Group from "@/views/manager/pages/group.vue";
 export default {
   inject:["reload"],
-  components: {Review, Profession, Group, Flow, Schedule, AddStoreRelu, Add,Edit, Home},
+  components: {Review, Profession, Group, Flow, Schedule, AddStoreRelu, Add,Edit, Home, LeaveApplication },
   setup() {
     const key={
       "home":'1',
@@ -129,8 +137,9 @@ export default {
       "schedule":'5',
       "flow":'6',
       "profession":'7',
-      "review":'8'，
-      "group":"9"
+      'leaveApplication':'8'
+      "review":'9'，
+      "group":"10"
     }
     const store = useStore()
     const role=store.state.role;
