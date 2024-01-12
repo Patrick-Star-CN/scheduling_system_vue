@@ -113,10 +113,12 @@ export default {
     return {
       selectedKeys: [this.user.key],
       collapsed: false,
-      user_detail:{}
+      user_detail:{},
+
     }
   },
   methods: {
+
     exit() {
       router.push("/");
       notification["info"]({
@@ -143,10 +145,12 @@ export default {
           .catch(error => {
             console.error('Error fetching data:', error);
           });
-    }
+    },
+
   },
+
   created() {
-    this.get_user_detail()
+    this.get_user_detail();
   }
 }
 </script>
