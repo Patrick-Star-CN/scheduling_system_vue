@@ -23,7 +23,7 @@
           this.reset();
         }
         else{
-          axios.get('/api/user/change_password', {
+          axios.post('/api/user/change_password', {
             old_password:this.Edit_password.old_password,
             new_password:this.Edit_password.new_password
           })

@@ -25,6 +25,7 @@ export default {
     async getStore() {  //async  await  是解决异步的一种方案，必须要加，但是原生封装就不用
       const {data: res} = await axios.get('/api/store')
       this.store = res.data
+      console.log(res.data)
       this.store_name=this.store[0].name
     },
     get_group(){
