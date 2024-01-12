@@ -90,7 +90,7 @@ export default {
 
 <template>
   <a-flex justify="center">
-    <h2 style="font-weight: bold;font-size: 25px">
+    <h2 style="font-weight: bold;font-size: 25px;letter-spacing: 8px">
       增加单个用户
     </h2>
   </a-flex>
@@ -139,8 +139,9 @@ export default {
   </a-form>
   <a-divider style="border-color: #252323" dashed />
   <a-flex justify="center">
-    <h2>导入文件</h2>
-
+    <h2 style="font-weight: bold;font-size: 25px;letter-spacing: 8px">
+      通过文件批量导入用户
+    </h2>
   </a-flex>
   <a-flex justify="center">
     <a-upload-dragger

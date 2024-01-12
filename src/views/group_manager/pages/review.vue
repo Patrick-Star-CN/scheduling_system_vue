@@ -114,11 +114,9 @@ onMounted(fetchLeaveRecords);
 
 <template>
   <div style="display: flex; justify-content: flex-end">
-    <a-button @click="toggleShowPending" type="primary" size="large" style="margin-bottom: 15px;">
-      仅显示未审核记录
-    </a-button>
-    <a-button @click="toggleShowPending" type="primary" size="large" style="margin-bottom: 15px;">
-      显示所有审核记录
+    <a-button @click="toggleShowPending" type="primary" size="large" style="margin-bottom: 10px;color: white">
+      <p v-if="showOnlyPending"> 仅显示未审核记录 </p>
+      <p v-else> 显示所有审核记录 </p>
     </a-button>
   </div>
   <div>

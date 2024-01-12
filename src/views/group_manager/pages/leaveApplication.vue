@@ -117,7 +117,7 @@ onMounted(fetchLeaveRecords);
 
 <template>
   <div style="display: flex;justify-content: flex-end">
-    <Button @click="showLeaveModal" size="large" style="margin-bottom: 10px;background-color: #67C23A;color: white">+增加请假记录</Button>
+    <Button @click="showLeaveModal" size="large" style="margin-bottom: 10px;" type="primary">+增加请假记录</Button>
   </div>
   <div>
     <a-table :columns="columns" :data-source="leaveRecords" :pagination="{ pageSize: 6 }">

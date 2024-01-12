@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue';
-import {DatePicker, Modal, Button, Select, MinusOutlined, Divider, message} from 'ant-design-vue';
+import { DatePicker, Modal, Select, MinusOutlined, Divider } from 'ant-design-vue';
 import axios from "axios";
 
 // 请假记录
@@ -43,7 +43,6 @@ const submitLeaveRecord = () => {
           fetchLeaveRecords();
           hideLeaveModal();
         } else {
-          message.error(response.data.data.message)
           // 如果添加失败，处理错误情况
           console.error('添加失败:', response);
         }
@@ -118,7 +117,7 @@ onMounted(fetchLeaveRecords);
 
 <template>
   <div style="display: flex;justify-content: flex-end">
-    <Button @click="showLeaveModal" size="large" style="margin-bottom: 10px;background-color: #67C23A;color: white">+增加请假记录</Button>
+    <a-button @click="showLeaveModal" type="primary" size="large" style="margin-bottom: 10px;">+增加请假记录</a-button>
   </div>
   <div>
     <a-table :columns="columns" :data-source="leaveRecords" :pagination="{ pageSize: 6 }">

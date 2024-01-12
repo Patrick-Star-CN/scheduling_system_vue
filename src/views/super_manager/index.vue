@@ -36,17 +36,16 @@
             <a-breadcrumb-item>首页</a-breadcrumb-item>
             <a-breadcrumb-item v-if="false">个人中心</a-breadcrumb-item>
           </a-breadcrumb>
-          <SearchOutlined class="top"/>
-          <ExpandAltOutlined class="top-right"/>
-          <FontSizeOutlined class="top-right" style="padding-right: 10px"/>
-          <a-avatar shape="square" size="large">
-            <template #icon>
-              <UserOutlined/>
-            </template>
-          </a-avatar>
+          <div class="top">
+            <a-avatar shape="square" size="large">
+              <template #icon>
+                <UserOutlined/>
+              </template>
+            </a-avatar>
+          </div>
           <span style="font-size: 15px">{{ user.username }}</span>
           <a-dropdown>
-            <DownOutlined style="padding-top: 20px;padding-right: 10px"/>
+            <DownOutlined style="padding-right: 30px"/>
             <template #overlay>
               <a-menu>
                 <a-menu-item>

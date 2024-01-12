@@ -3,7 +3,7 @@ import axios from "axios";
 import {message} from "ant-design-vue";
 
 export default {
-  inject:["reload"],
+  inject: ["reload"],
   data() {
     return {
       rule: {
@@ -43,9 +43,9 @@ export default {
     },
     change() {
       axios.post('/api/store/rule', {
-        open_store:this.rule.openStore,
-        close_store:this.rule.closeStore,
-        passenger:this.rule.passenger,
+        open_store: this.rule.openStore,
+        close_store: this.rule.closeStore,
+        passenger: this.rule.passenger,
       })
           .then(response => {
             this.data = response.data;
@@ -72,111 +72,115 @@ export default {
       增加门店规则
     </h2>
   </a-flex>
-  <a-form :label-col="{ span: 8 }"
-          :wrapper-col="{ span: 8 }"
-          autocomplete="off"
-          :model="rule">
-    <a-row>
-      <a-col :span="12" :offset="0">
-        <label style="font-size: 20px;font-weight: bold;letter-spacing: 5px">开店规则</label>
-      </a-col>
-    </a-row>
-    <br>
-    <a-row>
-      <a-col :span="3" :offset="0">
-        <a-form-item
-            label="分钟"
-            name="分钟"
-        >
-          <a-input-number v-model:value="rule.openStore.time"/>
+  <a-flex justify="center">
+    <a-form :label-col="{ span: 800 }"
+            :wrapper-col="{ span: 800 }"
+            autocomplete="off"
+            :model="rule">
+      <a-row>
+        <a-col :span="200" :offset="0">
+          <label style="font-size: 20px;font-weight: bold;letter-spacing: 5px">开店规则</label>
+        </a-col>
+      </a-row>
+      <br>
+      <a-row>
+        <a-col :span="9" :offset="0">
+          <a-form-item
+              label="分&emsp;&emsp;钟"
+              name="分钟"
+          >
+            <a-input-number v-model:value="rule.openStore.time"/>
+          </a-form-item>
+        </a-col>
+        <a-col :span="9" :offset="0">
+          <a-form-item
+              label="最少人数"
+              name="分钟"
+          >
+            <a-input-number v-model:value="rule.openStore.count"/>
+          </a-form-item>
+        </a-col>
+        <a-col :span="5" :offset="0">
+          <a-form-item
+              label="平方米/人"
+              name="分钟"
+          >
+            <a-input-number :min="0"
+                            :max="10"
+                            :step="0.1"
+                            string-mode v-model:value="rule.openStore.formula"/>
+          </a-form-item>
+        </a-col>
+      </a-row>
+      <a-row>
+        <a-col :span="10" :offset="0">
+          <label style="font-size: 20px;font-weight: bold;letter-spacing: 5px">关店规则</label>
+        </a-col>
+      </a-row>
+      <br>
+      <a-row>
+        <a-col :span="9" :offset="0">
+          <a-form-item
+              label="分&emsp;&emsp;钟"
+              name="分钟"
+          >
+            <a-input-number v-model:value="rule.closeStore.time"/>
+          </a-form-item>
+        </a-col>
+        <a-col :span="9" :offset="0">
+          <a-form-item
+              label="最少人数"
+              name="分钟"
+          >
+            <a-input-number v-model:value="rule.closeStore.count"/>
+          </a-form-item>
+        </a-col>
+        <a-col :span="5" :offset="0">
+          <a-form-item
+              label="平方米/人"
+              name="分钟"
+          >
+            <a-input-number :min="0"
+                            :max="10"
+                            :step="0.1"
+                            string-mode v-model:value="rule.closeStore.formula"/>
+          </a-form-item>
+        </a-col>
+      </a-row>
+      <a-row>
+        <a-col :span="12" :offset="0">
+          <label style="font-size: 20px;font-weight: bold;letter-spacing: 5px">客流规则</label>
+        </a-col>
+      </a-row>
+      <br>
+      <a-row>
+        <a-col :span="9" :offset="0">
+          <a-form-item
+              label="最少人数"
+              name="分钟"
+          >
+            <a-input-number v-model:value="rule.passenger.count"/>
+          </a-form-item>
+        </a-col>
+        <a-col :span="9" :offset="0">
+          <a-form-item
+              label="客&ensp; 流/人"
+              name="分钟"
+          >
+            <a-input-number :min="0"
+                            :max="10"
+                            :step="0.1"
+                            string-mode v-model:value="rule.passenger.formula"/>
+          </a-form-item>
+        </a-col>
+      </a-row>
+      <a-flex justify="center">
+        <a-form-item>
+          <a-button type="primary" html-type="submit" @click="change">保存</a-button>
         </a-form-item>
-      </a-col>
-      <a-col :span="5" :offset="1">
-        <a-form-item
-            label="最少人数"
-            name="分钟"
-        >
-          <a-input-number v-model:value="rule.openStore.count"/>
-        </a-form-item>
-      </a-col>
-      <a-col :span="5" :offset="0">
-        <a-form-item
-            label="平方米/人"
-            name="分钟"
-        >
-          <a-input-number :min="0"
-                          :max="10"
-                          :step="0.1"
-                          string-mode v-model:value="rule.openStore.formula"/>
-        </a-form-item>
-      </a-col>
-    </a-row>
-    <a-row>
-      <a-col :span="12" :offset="0">
-        <label style="font-size: 20px;font-weight: bold;letter-spacing: 5px">关店规则</label>
-      </a-col>
-    </a-row>
-    <br>
-    <a-row>
-      <a-col :span="3" :offset="0">
-        <a-form-item
-            label="分钟"
-            name="分钟"
-        >
-          <a-input-number v-model:value="rule.closeStore.time"/>
-        </a-form-item>
-      </a-col>
-      <a-col :span="5" :offset="1">
-        <a-form-item
-            label="最少人数"
-            name="分钟"
-        >
-          <a-input-number v-model:value="rule.closeStore.count"/>
-        </a-form-item>
-      </a-col>
-      <a-col :span="5" :offset="0">
-        <a-form-item
-            label="平方米/人"
-            name="分钟"
-        >
-          <a-input-number :min="0"
-                          :max="10"
-                          :step="0.1"
-                          string-mode v-model:value="rule.closeStore.formula"/>
-        </a-form-item>
-      </a-col>
-    </a-row>
-    <a-row>
-      <a-col :span="12" :offset="0">
-        <label style="font-size: 20px;font-weight: bold;letter-spacing: 5px">客流规则</label>
-      </a-col>
-    </a-row>
-    <br>
-    <a-row>
-      <a-col :span="4" :offset="0">
-        <a-form-item
-            label="最少人数"
-            name="分钟"
-        >
-          <a-input-number v-model:value="rule.passenger.count"/>
-        </a-form-item>
-      </a-col>
-      <a-col :span="4" :offset="0">
-        <a-form-item
-            label="客流/人"
-            name="分钟"
-        >
-          <a-input-number :min="0"
-                          :max="10"
-                          :step="0.1"
-                          string-mode v-model:value="rule.passenger.formula"/>
-        </a-form-item>
-      </a-col>
-    </a-row>
-    <a-form-item>
-      <a-button type="primary" html-type="submit" @click="change">保存</a-button>
-    </a-form-item>
-  </a-form>
+      </a-flex>
+    </a-form>
+  </a-flex>
 </template>
 
 <style scoped>

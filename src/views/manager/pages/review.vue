@@ -25,7 +25,6 @@ const fetchLeaveRecords = () => {
             type: record.type,
             approvalTime: record.review_time !== '未审核' ? new Date(record.review_time).toLocaleString() : '—'
           }));
-          console.log(typeof showOnlyPending.value)
           if (showOnlyPending.value) {
             // 仅保留状态为“待审核”的记录
             data = data.filter(record => record.status === '待审核');
@@ -84,7 +83,6 @@ const columns = [
     // 使用插槽的名称
   },
 ];
-
 // 审核选项
 const reviewOptions = ['通过', '不通过'];
 
@@ -94,7 +92,7 @@ const handleReviewConfirm = async (record) => {
     // 向后端发送审核结果
     const response = await axios.post('/api/leave/review', {
       record_id: record.recordId,
-      status: record.reviewSelection == '通过'?1:(record.reviewSelection == '不通过'?0:2),
+      status: record.reviewSelection === '通过'?1:(record.reviewSelection === '不通过'?0:2),
     });
 
     if (response.data && response.data.code === 200) {
@@ -113,11 +111,9 @@ onMounted(fetchLeaveRecords);
 
 <template>
   <div style="display: flex; justify-content: flex-end">
-    <a-button @click="toggleShowPending" type="primary" size="large" style="margin-bottom: 15px;">
-      仅显示未审核记录
-    </a-button>
-    <a-button @click="toggleShowPending" type="primary" size="large" style="margin-bottom: 15px;">
-      显示所有审核记录
+    <a-button @click="toggleShowPending" type="primary" size="large" style="margin-bottom: 10px;color: white">
+      <p v-if="showOnlyPending"> 仅显示未审核记录 </p>
+      <p v-else> 显示所有审核记录 </p>
     </a-button>
   </div>
   <div>

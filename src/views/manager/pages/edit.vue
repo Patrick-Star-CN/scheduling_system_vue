@@ -52,7 +52,9 @@ export default {
 
 <template>
   <a-flex justify="center">
-    <span style="font-weight: bold;font-size: 20px;letter-spacing: 5px">修改密码</span>
+    <h2 style="font-weight: bold;font-size: 25px;letter-spacing: 8px">
+      修改密码
+    </h2>
   </a-flex>
   <br>
   <a-form :label-col="{ span: 8 }"
