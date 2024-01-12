@@ -47,19 +47,19 @@ export default {
       ],
       increase_group: {
         manager_id: "",
-        name:"",
+        name: "",
         type: ""
       },
       edit_group: {
         id: "",
         store_id: "",
         manager_id: "",
-        name:"",
+        name: "",
         type: ""
       },
       increase_open: false,
       edit_open: false,
-      detail:''
+      detail: ''
     }
   },
   methods: {
@@ -82,10 +82,10 @@ export default {
 
     },
     edit(column, record) {
-      this.edit_group=record
+      this.edit_group = record
       this.edit_open = true
     },
-    editCancel(){
+    editCancel() {
       this.reload()
     },
     editOk() {
@@ -94,8 +94,8 @@ export default {
         id: this.edit_group.id,
         store_id: this.edit_group.store_id,
         manager_id: this.edit_group.manager_id,
-        name:this.edit_group.name,
-        type:this.edit_group.type
+        name: this.edit_group.name,
+        type: this.edit_group.type
       })
           .then(response => {
             console.log(response.data)
@@ -122,8 +122,8 @@ export default {
         console.log(this.increase_group)
         axios.post('/api/group/' + this.increase_group.manager_id + '/' + this.increase_group.name + '/' + this.increase_group.type, {
           manager_id: this.increase_group.manager_id,
-          name:this.increase_group.name,
-          type:this.increase_group.type
+          name: this.increase_group.name,
+          type: this.increase_group.type
         })
             .then(response => {
               this.data = response.data;
@@ -140,7 +140,7 @@ export default {
             });
       }
     },
-    get_group(){
+    get_group() {
       axios.get('/api/group', {})
           .then(response => {
             this.data = response.data;
@@ -162,8 +162,7 @@ export default {
 </script>
 <template>
   <div style="display: flex;justify-content: flex-end">
-    <a-button size="large" style="margin-bottom: 10px;background-color: #67C23A;color: white"
-              @click="increase_open = true">
+    <a-button @click="increase_open = true" type="primary" size="large" style="margin-bottom: 10px;color: white">
       <PlusOutlined/>
       增加信息
     </a-button>
