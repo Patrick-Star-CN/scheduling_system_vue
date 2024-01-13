@@ -17,6 +17,10 @@
           <PlusSquareOutlined />
           <span>管理组别信息</span>
         </a-menu-item>
+        <a-menu-item key="4" @click="change_page('manager')">
+          <UserSwitchOutlined />
+          <span>人员管理</span>
+        </a-menu-item>
       </a-menu>
     </a-layout-sider>
     <a-layout>
@@ -61,6 +65,8 @@
         </edit>
         <group v-if="user.page==='group'">
         </group>
+        <manager v-if="user.page==='manager'">
+        </manager>
       </a-layout-content>
     </a-layout>
   </a-layout>
@@ -73,14 +79,16 @@ import Edit from "@/views/vice_manager/pages/edit.vue";
 import {useStore} from "vuex";
 import axios from "axios";
 import Group from "@/views/vice_manager/pages/group.vue";
+import Manager from "@/views/vice_manager/pages/manager.vue";
 
 export default {
-  components: { Group, Edit, Home},
+  components: { Group, Edit, Home, Manager},
   setup() {
     const key={
       "home":'1',
       "edit":'2',
-      "group":'3'
+      "group":'3',
+      "manager":'4',
     }
     const store = useStore()
     const role=store.state.role;
