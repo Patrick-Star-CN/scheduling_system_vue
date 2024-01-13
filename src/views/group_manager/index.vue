@@ -21,6 +21,14 @@
           <ToolOutlined/>
           <span>申请请假</span>
         </a-menu-item>
+        <a-menu-item key="5" @click="change_page('shift')">
+          <ToolOutlined/>
+          <span>申请换班</span>
+        </a-menu-item>
+        <a-menu-item key="6" @click="change_page('shiftResponse')">
+          <ToolOutlined/>
+          <span>换班响应</span>
+        </a-menu-item>
       </a-menu>
     </a-layout-sider>
     <a-layout>
@@ -69,6 +77,10 @@
         </review>
         <leaveApplication v-if="user.page==='leaveApplication'">
         </leaveApplication>
+        <shift v-if="user.page==='shift'" :user_detail="user_detail">
+        </shift>
+        <shift-response v-if="user.page==='shiftResponse'" :user_detail="user_detail">
+        </shift-response>
       </a-layout-content>
     </a-layout>
   </a-layout>
@@ -82,16 +94,20 @@ import {useStore} from "vuex";
 import Review from "@/views/group_manager/pages/review.vue";
 import LeaveApplication from "@/views/group_manager/pages/leaveApplication.vue";
 import axios from "axios";
+import Shift from "@/views/worker/pages/shift.vue";
+import ShiftResponse from "@/views/worker/pages/shiftResponse.vue";
 
 export default {
-  components: {Edit, LeaveApplication, Home, Review},
+  components: {Edit, LeaveApplication, Home, Review,Shift, ShiftResponse},
 
   setup() {
     const key = {
       "home": '1',
       "edit": '2',
       'review': '3',
-      'leaveApplication': '4'
+      'leaveApplication': '4',
+      "shift":'5',
+      "shiftResponse":'6',
     }
     const store = useStore()
     const role = store.state.role;
