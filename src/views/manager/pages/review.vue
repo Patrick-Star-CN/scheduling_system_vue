@@ -2,6 +2,8 @@
 import { ref, onMounted } from 'vue';
 
 import axios from "axios";
+import router from "@/router";
+import {message} from "ant-design-vue";
 const leaveRecords = ref([]);
 const showOnlyPending = ref(false); // 用于跟踪是否只显示未审核的记录
 // 加载数据的方法
@@ -98,7 +100,12 @@ const handleReviewConfirm = async (record) => {
     if (response.data && response.data.code === 200) {
       // 更新前端显示的记录状态
       fetchLeaveRecords();
-    } else {
+    }
+    else if (response.data.data.code === 10001) {
+      router.push("/")
+      message.warn("Token已被顶下线")
+    }
+    else {
       // 处理后端响应错误
       console.error('审核失败:', response.data.message);
     }

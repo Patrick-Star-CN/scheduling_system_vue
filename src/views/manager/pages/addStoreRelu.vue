@@ -1,6 +1,7 @@
 <script>
 import axios from "axios";
 import {message} from "ant-design-vue";
+import router from "@/router";
 
 export default {
   inject: ["reload"],
@@ -33,7 +34,12 @@ export default {
             if (this.data.msg === "success") {
               this.rule = this.data.data;
               console.log(this.rule)
-            } else {
+            }
+            else if(this.data.data.code===10001){
+              router.push("/")
+              message.warn("Token已被顶下线")
+            }
+            else {
               message.warn("查询门店的规则信息失败")
             }
           })

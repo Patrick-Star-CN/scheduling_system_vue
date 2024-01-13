@@ -1,6 +1,8 @@
 <script>
 
 import axios from "axios";
+import router from "@/router";
+import {message} from "ant-design-vue";
 
 export default {
   inject:["reload"],
@@ -62,6 +64,10 @@ export default {
               const end_time = this.data.end_time
               this.staff_shift[0].start_time = start_time
               this.staff_shift[this.staff_shift.length - 1].end_time = end_time
+            }
+            if (this.data.data.code === 10001) {
+              router.push("/")
+              message.warn("Token已被顶下线")
             }
           })
           .catch(error => {

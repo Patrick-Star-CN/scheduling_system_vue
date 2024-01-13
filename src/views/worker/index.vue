@@ -118,19 +118,22 @@ export default {
     const store = useStore()
     const role=store.state.role;
     const user=store.state.user;
+    let user_detail=store.state.user_detail;
     user.page=JSON.parse(sessionStorage.getItem("user")).page
     user.username=JSON.parse(sessionStorage.getItem("user")).username
+    if(JSON.parse(sessionStorage.getItem("user_detail"))!=null){
+      user_detail=JSON.parse(sessionStorage.getItem("user_detail"))
+    }
     user.key=key[user.page]
     console.log(user)
     return {
-      user,role
+      user,role,user_detail
     }
   },
   data() {
     return {
       selectedKeys: [this.user.key],
       collapsed: false,
-      user_detail:{}
     }
   },
   methods: {
@@ -152,8 +155,13 @@ export default {
             this.data = response.data;
             if (this.data.msg === "success") {
               this.user_detail=this.data.data;
-              console.log(this.user_detail)
-            } else {
+              sessionStorage.setItem("user_detail",JSON.stringify(this.user_detail))
+            }
+            else if(this.data.data.code===10001){
+              router.push("/")
+              message.warn("Token已被顶下线")
+            }
+            else {
               message.warn("查询用户具体信息失败")
             }
           })

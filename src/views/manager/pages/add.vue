@@ -1,6 +1,7 @@
 <script>
 import axios from "axios";
 import {message} from "ant-design-vue";
+import router from "@/router";
 
 export default {
   inject:["reload"],
@@ -13,7 +14,7 @@ export default {
         group: ""
       },
       store: "",
-      fileList:"",
+      fileList:[],
       name:[],
       group_name:{},
       group:"",
@@ -25,6 +26,7 @@ export default {
     async getStore() {  //async  await  是解决异步的一种方案，必须要加，但是原生封装就不用
       const {data: res} = await axios.get('/api/store')
       this.store = res.data
+      console.log(res.data)
       this.store_name=this.store[0].name
     },
     get_group(){
@@ -72,14 +74,67 @@ export default {
             if (this.data.msg === "success") {
               message.success('添加成功！');
               this.reload()
-            } else {
+            }
+            else if(this.data.data.code===10001){
+              router.push("/")
+              message.warn("登录过期")
+            }
+            else {
               message.error('添加失败！');
             }
           })
           .catch(error => {
             console.error('Error fetching data:', error);
           });
-    }
+    },
+    async uploadFiles(info) {
+      //初始化文件信息
+      this.fileInfo = {
+        uid: info.file.uid,
+        name: info.file.name,
+        status: "uploading",
+        response: "",
+        url: "",
+      };
+      //调用公共上传方法
+      await this.uploadFilesToServer(
+          info.file
+      );
+    },
+
+    uploadFilesToServer(files) {
+      axios.post('/api/shift/customer-flow', {
+        file: files,
+      }, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        }
+      })
+          .then(response => {
+            this.data = response.data;
+            if (this.data.msg === "success") {
+              this.fileInfo.status = "done";
+              this.fileList.pop()
+              this.fileList.push(this.fileInfo)
+              message.success(files.name + "上传成功！");
+              this.reload()
+            }
+            else if(this.data.data.code===10001){
+              router.push("/")
+              message.warn("登录过期")
+            }
+            else {
+              this.fileInfo.status = "error";
+              this.fileList.pop()
+              this.fileList.push(this.fileInfo)
+              console.log(this.fileList)
+              message.error(files.name + "上传失败！");
+            }
+          })
+          .catch(error => {
+            console.error('Error fetching data:', error);
+          });
+    },
   },
   created() {
     this.getStore()
@@ -145,7 +200,9 @@ export default {
   <a-flex justify="center">
     <a-upload-dragger
         name="file"
+        v-model:fileList="fileList"
         @change="handleImportExcel"
+        :customRequest="uploadFiles"
         style="width: 100%"
     >
       <p class="ant-upload-drag-icon">

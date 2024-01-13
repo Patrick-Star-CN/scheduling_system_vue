@@ -1,6 +1,7 @@
 <script>
   import {message} from "ant-design-vue";
   import axios from "axios";
+  import router from "@/router";
 
   export default {
     data(){
@@ -23,7 +24,7 @@
           this.reset();
         }
         else{
-          axios.get('/api/user/change_password', {
+          axios.post('/api/user/change_password', {
             old_password:this.Edit_password.old_password,
             new_password:this.Edit_password.new_password
           })
@@ -31,6 +32,10 @@
                 this.data = response.data;
                 if(this.data.msg==="success"){
                   message.success('修改密码成功！');
+                }
+                else if(this.data.data.code===10001){
+                  router.push("/")
+                  message.warn("登录过期")
                 }
                 else{
                   message.warning('修改密码失败！');

@@ -2,6 +2,7 @@
 
 import axios from "axios";
 import {message} from "ant-design-vue";
+import router from "@/router";
 
 export default {
   props: {
@@ -39,14 +40,14 @@ export default {
         },
       ],
       shift_detail:Array.from({ length: 6 }, () => new Array(7).fill(false)),
-      Detail:Array.from({ length: 6 }, () => new Array(7)),
+      Detail:Array.from({ length: 6 }, () => new Array(7).fill("")),
       schedule: ""
     }
   },
   methods: {
     detail(i,j) {
       this.open = true;
-      console.log(this.Detail[i][j])
+      console.log(this.Detail)
       this.schedule=this.Detail[i][j]
     },
     get_shift() {
@@ -59,8 +60,10 @@ export default {
               const end_time = this.data.end_time
               this.staff_shift[0].start_time = start_time
               this.staff_shift[this.staff_shift.length - 1].end_time = end_time
-            } else {
-              message.error('获取信息失败！');
+            }
+            else if(this.data.data.code===10001){
+              router.push("/")
+              message.warn("登录过期")
             }
           })
           .catch(error => {
@@ -100,8 +103,6 @@ export default {
                 }
               }
               console.log(this.Detail)
-            } else {
-              message.error('获取信息失败！');
             }
           })
           .catch(error => {
@@ -145,7 +146,7 @@ export default {
       title="排班信息"
       placement="right"
   >
-    <div v-if="schedule.cashierList.length!==0">
+    <div v-if="schedule.cashierList==null || schedule.cashierList.length!==0">
       <p style="font-weight: bold">收银</p>
       <ul>
         <li v-for="user in schedule.cashierList" :key="user">
@@ -154,7 +155,7 @@ export default {
       </ul>
     </div>
 
-    <div v-if="schedule.customerServiceList.length!==0">
+    <div v-if="schedule.customerServiceList==null || schedule.customerServiceList.length!==0">
       <p style="font-weight: bold">导购</p>
       <ul>
         <li v-for="user in schedule.customerServiceList" :key="user">
@@ -163,7 +164,7 @@ export default {
       </ul>
     </div>
 
-    <div v-if="schedule.storageList.length!==0">
+    <div v-if="schedule.storageList==null || schedule.storageList.length!==0">
       <p style="font-weight: bold">库房</p>
       <ul>
         <li v-for="user in schedule.storageList" :key="user">
