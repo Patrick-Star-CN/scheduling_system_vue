@@ -158,7 +158,7 @@ export default {
     <a-form-item label="换班对象" name="shift_person">
       <a-select v-model:value="Shift_schedule.shift_person">
         <a-select-option v-for="personName in Shift_schedule.shiftPersons" :key="personName" :value="personName">
-          {{ personName }}
+          {{ personName.name}}
         </a-select-option>
       </a-select>
     </a-form-item>

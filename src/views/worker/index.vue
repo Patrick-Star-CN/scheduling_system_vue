@@ -25,6 +25,10 @@
           <ToolOutlined/>
           <span>申请请假</span>
         </a-menu-item>
+        <a-menu-item key="6" @click="change_page('shift')">
+          <AppstoreAddOutlined />
+          <span>申请换班</span>
+        </a-menu-item>
       </a-menu>
     </a-layout-sider>
     <a-layout>
@@ -73,6 +77,8 @@
         </leave-application>
         <schedule v-if="user.page==='schedule'" :user_detail="user_detail">
         </schedule>
+        <Shift v-if="user.page==='shift'">
+        </Shift>
       </a-layout-content>
     </a-layout>
   </a-layout>
@@ -85,11 +91,12 @@ import Preference from "@/views/worker/pages/preference.vue";
 import Edit from "@/views/worker/pages/edit.vue";
 import LeaveApplication from "@/views/worker/pages/leaveApplication.vue";
 import Schedule from "@/views/worker/pages/schedule.vue";
+import Shift from "@/views/worker/pages/shift.vue";
 import {useStore} from "vuex";
 import axios from "axios";
 
 export default {
-  components: {Schedule, LeaveApplication, Edit, Preference, Home},
+  components: {Schedule, LeaveApplication, Edit, Preference, Home,Shift},
   setup() {
     const key={
       "home":'1',
@@ -97,23 +104,27 @@ export default {
       "schedule":'3',
       "preference":'4',
       "leaveApplication":'5',
+      "shift":"6"
     }
     const store = useStore()
     const role=store.state.role;
     const user=store.state.user;
+    let user_detail=store.state.user_detail;
     user.page=JSON.parse(sessionStorage.getItem("user")).page
     user.username=JSON.parse(sessionStorage.getItem("user")).username
+    if(JSON.parse(sessionStorage.getItem("user_detail"))!=null){
+      user_detail=JSON.parse(sessionStorage.getItem("user_detail"))
+    }
     user.key=key[user.page]
     console.log(user)
     return {
-      user,role
+      user,role,user_detail
     }
   },
   data() {
     return {
       selectedKeys: [this.user.key],
       collapsed: false,
-      user_detail:{}
     }
   },
   methods: {
@@ -135,8 +146,13 @@ export default {
             this.data = response.data;
             if (this.data.msg === "success") {
               this.user_detail=this.data.data;
-              console.log(this.user_detail)
-            } else {
+              sessionStorage.setItem("user_detail",JSON.stringify(this.user_detail))
+            }
+            else if(this.data.data.code===10001){
+              router.push("/")
+              message.warn("Token已被顶下线")
+            }
+            else {
               message.warn("查询用户具体信息失败")
             }
           })

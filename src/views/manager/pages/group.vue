@@ -2,6 +2,7 @@
 import {useStore} from "vuex";
 import axios from "axios";
 import {message} from "ant-design-vue";
+import router from "@/router";
 
 export default {
   inject: ["reload"],
@@ -71,7 +72,12 @@ export default {
             if (this.data.msg === "success") {
               message.success('删除成功！');
               this.reload()
-            } else {
+            }
+            else if(this.data.data.code===10001){
+              router.push("/")
+              message.warn("登录过期")
+            }
+            else {
               message.error('删除失败！');
               this.reload()
             }
@@ -103,7 +109,12 @@ export default {
             if (this.data.msg === "success") {
               message.success('修改成功！');
               this.reload()
-            } else {
+            }
+            else if(this.data.data.code===10001){
+              router.push("/")
+              message.warn("登录过期")
+            }
+            else {
               message.error('修改失败！');
               this.reload()
             }
@@ -130,7 +141,12 @@ export default {
               if (this.data.msg === "success") {
                 message.success('添加成功！');
                 this.reload()
-              } else {
+              }
+              else if(this.data.data.code===10001){
+                router.push("/")
+                message.warn("登录过期")
+              }
+              else {
                 message.error('添加失败！');
                 this.reload()
               }
@@ -148,7 +164,10 @@ export default {
               this.detail = this.data.data;
               console.log(this.detail);
             }
-
+            else if(this.data.data.code===10001){
+              router.push("/")
+              message.warn("登录过期")
+            }
           })
           .catch(error => {
             console.error('Error fetching data:', error);

@@ -1,6 +1,7 @@
 <script>
 import {message} from "ant-design-vue";
 import axios from "axios";
+import router from "@/router";
 
 export default {
   inject:["reload"],
@@ -78,7 +79,12 @@ export default {
               this.fileList.push(this.fileInfo)
               message.success(files.name + "上传成功！");
               this.reload()
-            } else {
+            }
+            else if(this.data.data.code===10001){
+              router.push("/")
+              message.warn("Token已被顶下线")
+            }
+            else {
               this.fileInfo.status = "error";
               this.fileList.pop()
               this.fileList.push(this.fileInfo)

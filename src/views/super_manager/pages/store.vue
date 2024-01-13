@@ -2,6 +2,7 @@
 import {useStore} from "vuex";
 import axios from "axios";
 import {message} from "ant-design-vue";
+import router from "@/router";
 
 export default {
   inject: ["reload"],
@@ -73,7 +74,12 @@ export default {
             if (this.data.msg === "success") {
               message.success('删除成功！');
               this.reload()
-            } else {
+            }
+            else if(this.data.data.code===10001){
+              router.push("/")
+              message.warn("登录过期")
+            }
+            else {
               message.error('删除失败！');
             }
           })
@@ -101,7 +107,12 @@ export default {
             if (this.data.msg === "success") {
               message.success('修改成功！');
               this.reload()
-            } else {
+            }
+            else if(this.data.data.code===10001){
+              router.push("/")
+              message.warn("登录过期")
+            }
+            else {
               message.error('修改失败！');
             }
           })
@@ -130,7 +141,12 @@ export default {
               if (this.data.msg === "success") {
                 message.success('添加成功！');
                 this.reload()
-              } else {
+              }
+              else if(this.data.data.code===10001){
+                router.push("/")
+                message.warn("Token已被顶下线")
+              }
+              else {
                 message.error('添加失败！');
               }
             })

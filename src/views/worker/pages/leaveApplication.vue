@@ -1,7 +1,8 @@
 <script setup>
 import { ref, onMounted } from 'vue';
-import { DatePicker, Modal, Select, MinusOutlined, Divider } from 'ant-design-vue';
+import {DatePicker, Modal, Select, MinusOutlined, Divider, message} from 'ant-design-vue';
 import axios from "axios";
+import router from "@/router";
 
 // 请假记录
 const leaveRecords = ref([]);
@@ -21,6 +22,10 @@ const fetchLeaveRecords = () => {
             status: record.type === 'NOT_PROCEED' ? '待审核' : (record.type === 'PASS' ? '已通过' : '已拒绝'),
             approvalTime:  record.reviewTime ? new Date(record.reviewTime).toLocaleString() : '—'
           }));
+        }
+        else if(response.data.data.code===10001){
+          router.push("/")
+          message.warn("登录过期")
         }
       })
       .catch(error => {
@@ -42,7 +47,12 @@ const submitLeaveRecord = () => {
           // 如果添加成功，执行相应的操作，如通知用户、更新列表等
           fetchLeaveRecords();
           hideLeaveModal();
-        } else {
+        }
+        else if(response.data.data.code===10001){
+          router.push("/")
+          message.warn("Token已被顶下线")
+        }
+        else {
           // 如果添加失败，处理错误情况
           console.error('添加失败:', response);
         }

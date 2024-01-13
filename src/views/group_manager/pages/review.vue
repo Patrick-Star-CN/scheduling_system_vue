@@ -2,6 +2,8 @@
 import { ref, onMounted } from 'vue';
 
 import axios from "axios";
+import router from "@/router";
+import {message} from "ant-design-vue";
 const leaveRecords = ref([]);
 const showOnlyPending = ref(false); // 用于跟踪是否只显示未审核的记录
 // 加载数据的方法
@@ -32,6 +34,10 @@ const fetchLeaveRecords = () => {
           }
 
           leaveRecords.value = data;
+        }
+        else if(response.data.data.code===10001){
+          router.push("/")
+          message.warn("登录过期")
         }
       })
       .catch(error => {

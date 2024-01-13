@@ -2,6 +2,7 @@
 import {useStore} from "vuex";
 import axios from "axios";
 import {message} from "ant-design-vue";
+import router from "@/router";
 
 export default {
   inject: ["reload"],
@@ -139,6 +140,10 @@ export default {
             if (this.data.msg === "success") {
               this.detail = this.data.data;
               console.log(this.detail);
+            }
+            else if(this.data.data.code===10001){
+              router.push("/")
+              message.warn("Token已被顶下线")
             }
           })
           .catch(error => {

@@ -180,7 +180,11 @@ export default {
             if (this.data.msg === "success") {
               this.user_detail=this.data.data;
               sessionStorage.setItem("user_detail",JSON.stringify(this.user_detail))
-            } else {
+            }
+            else if(this.data.data.code===10001){
+              router.push("/")
+            }
+            else {
               message.warn("查询用户具体信息失败")
             }
           })
