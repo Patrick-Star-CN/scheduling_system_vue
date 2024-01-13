@@ -45,6 +45,10 @@
           <PlusSquareOutlined />
           <span>管理组别信息</span>
         </a-menu-item>
+        <a-menu-item key="11" @click="change_page('manage')">
+          <UserSwitchOutlined/>
+          <span>人员管理</span>
+        </a-menu-item>
       </a-menu>
     </a-layout-sider>
     <a-layout>
@@ -104,6 +108,8 @@
         </review>
          <group v-if="user.page==='group'">
         </group>
+        <manage v-if="user.page==='manage'">
+        </manage>
       </a-layout-content>
     </a-layout>
   </a-layout>
@@ -123,9 +129,11 @@ import Schedule from "@/views/manager/pages/schedule.vue";
 import Flow from "@/views/manager/pages/flow.vue";
 import Profession from "@/views/manager/pages/profession.vue";
 import Group from "@/views/manager/pages/group.vue";
+import Manage from "@/views/manager/pages/manage.vue";
+
 export default {
   inject:["reload"],
-  components: {Review, Profession, Group, Flow, Schedule, AddStoreRelu, Add,Edit, Home, LeaveApplication },
+  components: {Review, Profession, Group, Flow, Schedule, AddStoreRelu, Add,Edit, Home, LeaveApplication, Manage},
   setup() {
     const key={
       "home":'1',
@@ -137,7 +145,8 @@ export default {
       "profession":'7',
       'leaveApplication':'8',
       "review":'9',
-      "group":"10"
+      "group":"10",
+      'manage': '11'
     }
     const store = useStore()
     const role=store.state.role;

@@ -21,10 +21,6 @@
           <ToolOutlined/>
           <span>申请请假</span>
         </a-menu-item>
-        <a-menu-item key="5" @click="change_page('manage')">
-          <UserSwitchOutlined/>
-          <span>人员管理</span>
-        </a-menu-item>
       </a-menu>
     </a-layout-sider>
     <a-layout>
@@ -73,8 +69,6 @@
         </review>
         <leaveApplication v-if="user.page==='leaveApplication'">
         </leaveApplication>
-        <manage v-if="user.page==='manage'">
-        </manage>
       </a-layout-content>
     </a-layout>
   </a-layout>
@@ -97,8 +91,7 @@ export default {
       "home": '1',
       "edit": '2',
       'review': '3',
-      'leaveApplication': '4',
-      'manage': '5',
+      'leaveApplication': '4'
     }
     const store = useStore()
     const role = store.state.role;
