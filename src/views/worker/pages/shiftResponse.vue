@@ -32,11 +32,35 @@ const fetchShiftChangeRecords = () => {
 
 const columns = [
   { title: '编号', dataIndex: 'id', key: 'id', width: 50 },
-  { title: '原始周期', dataIndex: 'weekId1', key: 'weekId1', width: 100 },
-  { title: '原始班次', dataIndex: 'shiftId1', key: 'shiftId1', width: 100 },
+  {
+    title: '原始周期',
+    dataIndex: 'weekId1',
+    key: 'weekId1',
+    width: 100,
+    customRender: ({ text }) => getWeekdayName(text),
+  },
+  {
+    title: '换班周期',
+    dataIndex: 'weekId2',
+    key: 'weekId2',
+    width: 100,
+    customRender: ({ text }) => getWeekdayName(text),
+  },
+  {
+    title: '原始班次',
+    dataIndex: 'shiftId1',
+    key: 'shiftId1',
+    width: 100,
+    customRender: ({ text }) => getShiftTime(text),
+  },
+  {
+    title: '换班班次',
+    dataIndex: 'shiftId2',
+    key: 'shiftId2',
+    width: 100,
+    customRender: ({ text }) => getShiftTime(text),
+  },
   { title: '换班对象ID', dataIndex: 'requestPersonId', key: 'requestPersonId', width: 100 },
-  { title: '换班周期', dataIndex: 'weekId2', key: 'weekId2', width: 100 },
-  { title: '换班班次', dataIndex: 'shiftId2', key: 'shiftId2', width: 100 },
   { title: '状态', dataIndex: 'status', key: 'status', width: 100 },
   {
     title: '操作',
@@ -46,7 +70,23 @@ const columns = [
     // 使用插槽的名称
   },
 ];
+const getWeekdayName = (weekId) => {
+  const weekdays = ["星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日"];
+  return weekdays[weekId] || '未知';
+};
 
+// 获取班次时间
+const getShiftTime = (shiftId) => {
+  const shiftTimes = {
+    0: '开店前',
+    1: '09:00~12:00',
+    2: '12:00~15:00',
+    3: '15:00~18:00',
+    4: '18:00~21:00',
+    5: '关门后'
+  };
+  return shiftTimes[shiftId] || '未知';
+};
 const handleReviewConfirm = async (record) => {
   try {
     const result = record.reviewSelection === '通过' ? 1 : 0;
