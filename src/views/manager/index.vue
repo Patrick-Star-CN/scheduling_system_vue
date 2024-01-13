@@ -64,7 +64,10 @@
             <a-breadcrumb-item>首页</a-breadcrumb-item>
             <a-breadcrumb-item v-if="false">个人中心</a-breadcrumb-item>
           </a-breadcrumb>
-          <FieldTimeOutlined class="top" id="generate" @click="generate_shift" v-if="user.page==='schedule'"/>
+          <div class="top" id="generate" v-if="user.page==='schedule'">
+            <span style="font-weight: bold;color: #337ecc">生成排班</span>
+            <FieldTimeOutlined  @click="generate_shift"/>
+          </div>
           <div class="top">
             <a-avatar shape="square" size="large">
               <template #icon>
@@ -284,8 +287,7 @@ export default {
 }
 #generate{
   padding-right: 10px;
-  animation-name: example;
-  animation-duration: 4s;
+  color: #337ecc;
   animation-iteration-count: infinite;
 }
 #generate:hover{

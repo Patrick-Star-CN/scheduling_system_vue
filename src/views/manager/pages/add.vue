@@ -103,7 +103,7 @@ export default {
     },
 
     uploadFilesToServer(files) {
-      axios.post('/api/shift/customer-flow', {
+      axios.post('/api/user/multiple', {
         file: files,
       }, {
         headers: {
@@ -197,7 +197,7 @@ export default {
       通过文件批量导入用户
     </h2>
   </a-flex>
-  <a-flex justify="center">
+  <a-flex justify="center" style="height: 20vh">
     <a-upload-dragger
         name="file"
         v-model:fileList="fileList"
