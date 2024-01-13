@@ -67,7 +67,7 @@ export default {
             }
             if (this.data.data.code === 10001) {
               router.push("/")
-              message.warn("Token已被顶下线")
+              message.warn("登录超时")
             }
           })
           .catch(error => {
