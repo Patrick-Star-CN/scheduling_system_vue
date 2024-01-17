@@ -112,7 +112,7 @@ onMounted(() => {
         label="选择你要被换班的时间"
         name="days"
     >
-      <a-radio-group v-model:value="Shift_schedule.days" button-style="solid">
+      <a-radio-group v-model:value="Shift_schedule.shift_days" button-style="solid">
         <a-radio-button value="0">星期一</a-radio-button>
         <a-radio-button value="1">星期二</a-radio-button>
         <a-radio-button value="2">星期三</a-radio-button>
@@ -127,7 +127,7 @@ onMounted(() => {
         label="选择你要被换班的班次"
         name="time"
     >
-      <a-radio-group v-model:value="Shift_schedule.time" button-style="solid">
+      <a-radio-group v-model:value="Shift_schedule.shift_time" button-style="solid">
         <a-radio-button value="0">开店前</a-radio-button>
         <a-radio-button value="1">09:00~12:00</a-radio-button>
         <a-radio-button value="2">12:00~15:00</a-radio-button>
@@ -145,7 +145,7 @@ onMounted(() => {
                  label="选择你想要到的换班时间"
                  name="shift_days"
     >
-      <a-radio-group v-model:value="Shift_schedule.shift_days" button-style="solid">
+      <a-radio-group v-model:value="Shift_schedule.days" button-style="solid">
         <a-radio-button value="0">星期一</a-radio-button>
         <a-radio-button value="1">星期二</a-radio-button>
         <a-radio-button value="2">星期三</a-radio-button>
@@ -160,7 +160,7 @@ onMounted(() => {
                  label="选择你想要的换班班次"
                  name="shift_time"
     >
-      <a-radio-group v-model:value="Shift_schedule.shift_time" button-style="solid">
+      <a-radio-group v-model:value="Shift_schedule.time" button-style="solid">
         <a-radio-button value="0">开店前</a-radio-button>
         <a-radio-button value="1">09:00~12:00</a-radio-button>
         <a-radio-button value="2">12:00~15:00</a-radio-button>
