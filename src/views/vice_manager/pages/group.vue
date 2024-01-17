@@ -125,9 +125,11 @@ export default {
       } else {
         this.increase_open = false;
         console.log(this.increase_group)
-        axios.post('/api/group/' + this.increase_group.manager_id + '/' + this.increase_group.name, {
-          manager_id: this.increase_group.manager_id,
-          name:this.increase_group.name
+        axios.post('/api/group/vice', {
+          params:{
+            manager_id: this.increase_group.manager_id,
+            name:this.increase_group.name
+          }
         })
             .then(response => {
               this.data = response.data;
