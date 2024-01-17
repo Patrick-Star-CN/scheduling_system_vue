@@ -43,13 +43,12 @@ const shift = () => {
     this.reset();
     return; // 退出函数
   }
-
   // 构建要发送的数据对象
   let params = new URLSearchParams();
   params.append('user_id_changed', parseInt(Shift_schedule.shift_person) || 0);
-  params.append('shift_id_change', Shift_schedule.shift_bool === false ? parseInt(Shift_schedule.shift_days) : 0);
+  params.append('shift_id_change',Shift_schedule.shift_bool === "false" ? parseInt(Shift_schedule.shift_days):0);
   params.append('shift_id_changed', parseInt(Shift_schedule.time) || 0);
-  params.append('week_id_change', Shift_schedule.shift_bool === false ? parseInt(Shift_schedule.shift_time) : 0);
+  params.append('week_id_change', Shift_schedule.shift_bool === "false" ? parseInt(Shift_schedule.shift_time) : 0);
   params.append('week_id_changed', parseInt(Shift_schedule.days) || 0);
 
   axios.post('/api/shift/change-shift-worker', params)
@@ -190,6 +189,7 @@ onMounted(() => {
         <a-radio-button value="true" @click="shiftBoolTrue">是</a-radio-button>
         <a-radio-button value="false" @click="shiftBoolFalse">否</a-radio-button>
       </a-radio-group>
+
     </a-form-item>
 
     <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
